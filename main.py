@@ -7,12 +7,15 @@ import json
 hh_api = HH()
 
 # Получение вакансий с hh.ru в формате JSON
-vacancies= hh_api.load_vacancies("Python")
+vacancies = hh_api.load_vacancies("Python")
 
 print(hh_api.vacancies[-1])
 print(json.dumps(hh_api.vacancies[-1], indent=4, ensure_ascii=False))
 
 Vacancy(hh_api.vacancies[-1])
+
+
+print(Vacancy.list_of_vacancies(hh_api.vacancies))
 
 # # Преобразование набора данных из JSON в список объектов
 # vacancies_list = Vacancy.cast_to_object_list(hh_vacancies)
