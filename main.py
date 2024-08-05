@@ -1,6 +1,7 @@
 from src.hh import HH
 from src.vacancy import Vacancy
 import json
+from src.json_saver import JSONSaver
 
 
 # Создание экземпляра класса для работы с API сайтов с вакансиями
@@ -16,6 +17,9 @@ Vacancy(hh_api.vacancies[-1])
 
 
 print(Vacancy.list_of_vacancies(hh_api.vacancies))
+json_saver = JSONSaver()
+json_saver.save_to_file(Vacancy.list_of_vacancies(hh_api.vacancies))
+
 
 # # Преобразование набора данных из JSON в список объектов
 # vacancies_list = Vacancy.cast_to_object_list(hh_vacancies)

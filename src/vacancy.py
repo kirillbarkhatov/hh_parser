@@ -37,6 +37,15 @@ class Vacancy:
         # self.responsibility = vacancy["snippet"]["responsibility"]
         # print(self.name)
 
+    def to_dict(self) -> dict:
+        """Метод возвращает вакансию в формате словаря"""
+
+        result = {
+            "id": self.id,
+            "name": self.name
+        }
+        return result
+
     @staticmethod
     def list_of_vacancies(vacancies: dict) -> list:
         """Создание списка из объектов класса Vacancy"""
