@@ -1,15 +1,18 @@
-from src.HH import HH
+from src.hh import HH
+from src.vacancy import Vacancy
+import json
 
 
 # Создание экземпляра класса для работы с API сайтов с вакансиями
 hh_api = HH()
 
 # Получение вакансий с hh.ru в формате JSON
-hh_api.load_vacancies("Python")
+vacancies= hh_api.load_vacancies("Python")
 
-print(hh_api.vacancies)
+print(hh_api.vacancies[-1])
+print(json.dumps(hh_api.vacancies[-1], indent=4, ensure_ascii=False))
 
-
+Vacancy(hh_api.vacancies[-1])
 
 # # Преобразование набора данных из JSON в список объектов
 # vacancies_list = Vacancy.cast_to_object_list(hh_vacancies)
