@@ -1,5 +1,5 @@
 import requests
-from src.parser import Parser
+from src.api.parser import Parser
 
 
 class HH(Parser):

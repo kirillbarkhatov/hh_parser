@@ -1,6 +1,6 @@
 from typing import Any
 
-from src.file_worker import FileWorker
+from src.file_processing.file_worker import FileWorker
 
 import json
 

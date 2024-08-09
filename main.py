@@ -1,7 +1,7 @@
-from src.hh import HH
-from src.vacancy import Vacancy
+from src.api.hh import HH
+from src.vacancy_processing import Vacancy
 import json
-from src.json_saver import JSONSaver
+from src.file_processing.json_saver import JSONSaver
 
 
 # Создание экземпляра класса для работы с API сайтов с вакансиями
@@ -25,12 +25,12 @@ json_saver.save_to_file(Vacancy.list_of_vacancies(hh_api.vacancies))
 # vacancies_list = Vacancy.cast_to_object_list(hh_vacancies)
 #
 # # Пример работы контструктора класса с одной вакансией
-# vacancy = Vacancy("Python Developer", "", "100 000-150 000 руб.", "Требования: опыт работы от 3 лет...")
+# vacancy_processing = Vacancy("Python Developer", "", "100 000-150 000 руб.", "Требования: опыт работы от 3 лет...")
 #
 # # Сохранение информации о вакансиях в файл
 # json_saver = JSONSaver()
-# json_saver.add_vacancy(vacancy)
-# json_saver.delete_vacancy(vacancy)
+# json_saver.add_vacancy(vacancy_processing)
+# json_saver.delete_vacancy(vacancy_processing)
 #
 # # Функция для взаимодействия с пользователем
 # def user_interaction():
