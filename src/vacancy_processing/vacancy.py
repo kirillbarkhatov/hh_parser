@@ -1,8 +1,10 @@
 from typing import Any
+from src.vacancy_processing.abc_vacancy_worker import VacancyWorker
 
 
-class Vacancy:
+class Vacancy(VacancyWorker):
     """Класс для работы с вакансиями"""
+
 
     id: int  # уникальный идентификатор вакансии
     name: str  # название вакансии
@@ -51,3 +53,10 @@ class Vacancy:
         """Создание списка из объектов класса Vacancy"""
 
         return [Vacancy(vacancy) for vacancy in vacancies]
+
+    def check_attribute(self, *args: Any, **kwargs: Any) -> Any:
+        pass
+
+    def salary_comparison(self, *args: Any, **kwargs: Any) -> Any:
+        pass
+

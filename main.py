@@ -1,24 +1,24 @@
 from src.api.hh import HH
-from src.vacancy_processing import Vacancy
+from src.vacancy_processing.vacancy import Vacancy
 import json
 from src.file_processing.json_saver import JSONSaver
 
 
 # Создание экземпляра класса для работы с API сайтов с вакансиями
-hh_api = HH()
+# hh_api = HH()
 
 # Получение вакансий с hh.ru в формате JSON
-vacancies = hh_api.load_vacancies("Python")
+vacancies = HH.load_vacancies("Python")
 
-print(hh_api.vacancies[-1])
-print(json.dumps(hh_api.vacancies[-1], indent=4, ensure_ascii=False))
+print(vacancies[-1])
+print(json.dumps(vacancies[-1], indent=4, ensure_ascii=False))
 
-Vacancy(hh_api.vacancies[-1])
+Vacancy(vacancies[-1])
 
 
-print(Vacancy.list_of_vacancies(hh_api.vacancies))
+print(Vacancy.list_of_vacancies(vacancies))
 json_saver = JSONSaver()
-json_saver.save_to_file(Vacancy.list_of_vacancies(hh_api.vacancies))
+json_saver.save_to_file(Vacancy.list_of_vacancies(vacancies))
 
 
 # # Преобразование набора данных из JSON в список объектов

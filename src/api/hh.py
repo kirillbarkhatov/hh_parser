@@ -1,5 +1,6 @@
 import requests
-from src.api.parser import Parser
+from src.api.abc_parser import Parser
+from typing import Any
 
 
 class HH(Parser):
@@ -8,17 +9,29 @@ class HH(Parser):
     Класс Parser является родительским классом
     """
 
-    def __init__(self):
-        self.url = 'https://api.hh.ru/vacancies'
-        self.headers = {'User-Agent': 'HH-User-Agent'}
-        self.params = {'text': '', 'page': 0, 'per_page': 100}
-        self.vacancies = []
-        # super().__init__(file_worker)
+    @staticmethod
+    def __connection_to_api(api_params: dict) -> Any:
+        """Приватный метод для подключения к API"""
 
-    def load_vacancies(self, keyword):
-        self.params['text'] = keyword
-        while self.params.get('page') != 20:
-            response = requests.get(self.url, headers=self.headers, params=self.params)
-            vacancies = response.json()['items']
-            self.vacancies.extend(vacancies)
-            self.params['page'] += 1
+        url = 'https://api.hh.ru/vacancies'
+        headers = {'User-Agent': 'HH-User-Agent'}
+
+        response = requests.get(url, headers=headers, params=api_params)
+
+        if response.status_code != 200:
+            raise requests.RequestException
+        return response
+
+    @staticmethod
+    def load_vacancies(keyword: str) -> dict:
+        """Метод для получения вакансий по ключевому слову"""
+
+        params = {'text': keyword, 'page': 0, 'per_page': 100}
+        vacancies = []
+
+        while params.get('page') != 20:
+            vacancies = HH.__connection_to_api(params).json()['items']
+            vacancies.extend(vacancies)
+            params['page'] += 1
+
+        return vacancies
