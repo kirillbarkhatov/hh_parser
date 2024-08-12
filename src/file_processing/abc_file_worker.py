@@ -12,12 +12,6 @@ class FileWorker(ABC):
         pass
 
     @abstractmethod
-    def add_to_file(self, *args: Any, **kwargs: Any) -> Any:
-        """Общий функционал для добавления данных в файл"""
-
-        pass
-
-    @abstractmethod
     def get_from_file(self, *args: Any, **kwargs: Any) -> Any:
         """Общий функционал для получения данных из файла"""
 

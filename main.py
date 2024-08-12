@@ -1,7 +1,7 @@
 from src.api.hh import HH
 from src.vacancy_processing.vacancy import Vacancy
 import json
-from src.file_processing.json_saver import JSONSaver
+from src.file_processing.json_worker import JSONWorker
 
 
 # Создание экземпляра класса для работы с API сайтов с вакансиями
@@ -13,13 +13,28 @@ vacancies = HH.load_vacancies("Python")
 print(vacancies[-1])
 print(json.dumps(vacancies[-1], indent=4, ensure_ascii=False))
 
-Vacancy(vacancies[-1])
+obj_vacancy = Vacancy(vacancies[-1])
+obj_vacancy2 = Vacancy(vacancies[-2])
 
 
+a = 3
 print(Vacancy.list_of_vacancies(vacancies))
-json_saver = JSONSaver()
-json_saver.save_to_file(Vacancy.list_of_vacancies(vacancies))
+json_saver = JSONWorker()
+json_saver.save_to_file(Vacancy.list_of_dicts_vacancies(vacancies))
 
+print(obj_vacancy.to_dict())
+print(obj_vacancy.__slots__)
+
+print(obj_vacancy.get_salary())
+print(obj_vacancy2.get_salary())
+print(obj_vacancy == obj_vacancy2)
+print(obj_vacancy != obj_vacancy2)
+print(obj_vacancy < obj_vacancy2)
+print(obj_vacancy <= obj_vacancy2)
+print(obj_vacancy > obj_vacancy2)
+print(obj_vacancy >= obj_vacancy2)
+
+# print(vars())
 
 # # Преобразование набора данных из JSON в список объектов
 # vacancies_list = Vacancy.cast_to_object_list(hh_vacancies)

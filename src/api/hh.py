@@ -29,7 +29,8 @@ class HH(Parser):
         params = {'text': keyword, 'page': 0, 'per_page': 100}
         vacancies = []
 
-        while params.get('page') != 20:
+        # while params.get('page') != 20:
+        while params.get('page') != 1:
             vacancies = HH.__connection_to_api(params).json()['items']
             vacancies.extend(vacancies)
             params['page'] += 1

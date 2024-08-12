@@ -80,6 +80,12 @@ class Vacancy(VacancyWorker):
 
         return [Vacancy(vacancy) for vacancy in vacancies]
 
+    @staticmethod
+    def list_of_dicts_vacancies(vacancies: dict) -> list:
+        """Создание списка словарей из списка объектов вакансий"""
+
+        return [vacancy.to_dict() for vacancy in Vacancy.list_of_vacancies(vacancies)]
+
     def __check_attribute(self, attribute) -> Any:
         """Валидация аттрибутов при создании объекта класса"""
 
