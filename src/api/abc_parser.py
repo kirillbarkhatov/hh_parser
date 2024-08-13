@@ -7,13 +7,14 @@ class Parser(ABC):
 
     @staticmethod
     @abstractmethod
-    def __connection_to_api(api_params: dict) -> object:
-        """Общий функционал подключения к внешнему API для всех подклассов"""
+    def __connection_to_api(api_params: dict) -> Any:
+        """Приватный метод для подключения к API"""
+
         pass
 
     @staticmethod
     @abstractmethod
-    def load_vacancies(keywords: str) -> dict:
-        """Общий функционал для загрузки данных о вакансиях всех подклассов"""
-        pass
+    def load_vacancies(cls, keyword: str) -> dict:
+        """Метод для получения вакансий по ключевому слову"""
 
+        pass

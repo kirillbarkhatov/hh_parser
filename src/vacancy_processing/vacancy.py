@@ -99,6 +99,7 @@ class Vacancy(VacancyWorker):
         return attribute in self.__slots__
 
     @staticmethod
+    @func_call_logging
     def list_id_vacancies(vacancies: list[dict]):
         """Получить список ID из списка вакансий"""
 

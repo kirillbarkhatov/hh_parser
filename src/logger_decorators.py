@@ -1,11 +1,14 @@
 from time import time
 from src.logger_settings import logger_func_call
 from functools import wraps
+from typing import Any
 
 
-def func_call_logging(func):
+def func_call_logging(func: Any) -> Any:
+    """Декоратор для логирования вызова функции"""
+
     @wraps(func)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
         wrapper.call_count += 1
         logger_func_call.info(f"Функция {func.__module__}.{func.__name__}. Вызов № {wrapper.call_count}")
         time_1 = time()
