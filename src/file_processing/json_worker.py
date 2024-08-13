@@ -2,6 +2,7 @@ from typing import Any
 
 from src.file_processing.abc_file_worker import FileWorker
 from src.vacancy_processing.vacancy import Vacancy
+from src.logger_decorators import func_call_logging
 
 import json
 
@@ -12,15 +13,18 @@ class JSONWorker(FileWorker):
     path_to_file: str = "data/"  # путь до файла
     path_with_filename: str  # путь до файла вместе с именем файла
 
+    @func_call_logging
     def __init__(self, file_name: str = "vacancies.json") -> None:
         self.__file_name = file_name
 
+    @func_call_logging
     def save_to_file(self, vacancies: list[dict]) -> None:
         """Метод для сохранения в файл списка вакансий"""
 
         with open(self.path_to_file+self.__file_name, "w") as file:
             json.dump(vacancies, file, indent=4, ensure_ascii=False)
 
+    @func_call_logging
     def add_to_file(self, vacancies: list[dict]) -> None:
         """Метод для добавления в файл вакансий без дублирования"""
 
@@ -43,12 +47,14 @@ class JSONWorker(FileWorker):
         # vacancies_in_file.extend(add_vacancies)
         # self.save_to_file(vacancies_in_file)
 
+    @func_call_logging
     def get_from_file(self) -> list[dict]:
         """Метод для получения данных из файла"""
 
         with open(self.path_to_file+self.__file_name, "r") as file:
             return json.load(file)
 
+    @func_call_logging
     def delete_from_file(self, list_id_vacancies: list[str] | None = None) -> None:
         """Общий функционал для удаления данных из файла"""
 

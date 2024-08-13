@@ -1,5 +1,6 @@
 from typing import Any
 from src.vacancy_processing.abc_vacancy_worker import VacancyWorker
+from src.logger_decorators import func_call_logging
 
 
 class Vacancy(VacancyWorker):
@@ -22,6 +23,7 @@ class Vacancy(VacancyWorker):
 
     __slots__ = ("id", "name", "location", "address", "salary", "published_at", "url", "name_employer", "url_employer", "schedule", "employment", "experience", "requirement", "responsibility")
 
+    @func_call_logging
     def __init__(self, vacancy: dict) -> None:
 
         for vacancy_attribute in self.__slots__:
@@ -29,6 +31,7 @@ class Vacancy(VacancyWorker):
                 setattr(self, vacancy_attribute, self.__get_attribute_value(vacancy_attribute, vacancy))
 
     @staticmethod
+    @func_call_logging
     def __get_attribute_value(attribute: str, vacancy: dict) -> Any:
         """Привязка мест хранения аттрибутов к месту хранения в JSON"""
 
@@ -64,6 +67,7 @@ class Vacancy(VacancyWorker):
             case _:
                 return None
 
+    @func_call_logging
     def to_dict(self) -> dict:
         """Метод возвращает вакансию в формате словаря"""
 
@@ -75,17 +79,20 @@ class Vacancy(VacancyWorker):
         return result
 
     @staticmethod
+    @func_call_logging
     def list_of_vacancies(vacancies: dict) -> list:
         """Создание списка из объектов класса Vacancy"""
 
         return [Vacancy(vacancy) for vacancy in vacancies]
 
     @staticmethod
+    @func_call_logging
     def list_of_dicts_vacancies(vacancies: dict) -> list:
         """Создание списка словарей из списка объектов вакансий"""
 
         return [vacancy.to_dict() for vacancy in Vacancy.list_of_vacancies(vacancies)]
 
+    @func_call_logging
     def __check_attribute(self, attribute) -> Any:
         """Валидация аттрибутов при создании объекта класса"""
 
@@ -97,6 +104,7 @@ class Vacancy(VacancyWorker):
 
         return [vacancy["id"] for vacancy in vacancies]
 
+    @func_call_logging
     def get_salary(self) -> str:
         """Получить значение зарплаты"""
 
@@ -114,6 +122,7 @@ class Vacancy(VacancyWorker):
 
         return f"От {self.salary["from"]} до {self.salary["to"]}"
 
+    @func_call_logging
     def __get_salary_for_comparison(self) -> int:
         """Получить значение зарплаты для сравнения. По умолчанию берется значение "от", если ничего не указано - 0"""
 
@@ -131,6 +140,7 @@ class Vacancy(VacancyWorker):
 
         return min(self.salary["from"], self.salary["to"])
 
+    @func_call_logging
     def __eq__(self, other: Any) -> Any:
         """Метод сравнения вакансий по зарплате - для равенства =="""
 
@@ -139,6 +149,7 @@ class Vacancy(VacancyWorker):
         else:
             raise TypeError
 
+    @func_call_logging
     def __ne__(self, other: Any) -> Any:
         """Метод сравнения вакансий по зарплате - для неравенства !="""
 
@@ -147,6 +158,7 @@ class Vacancy(VacancyWorker):
         else:
             raise TypeError
 
+    @func_call_logging
     def __lt__(self, other: Any) -> Any:
         """Метод сравнения вакансий по зарплате - для оператора меньше <"""
         if type(other) is Vacancy:
@@ -154,6 +166,7 @@ class Vacancy(VacancyWorker):
         else:
             raise TypeError
 
+    @func_call_logging
     def __le__(self, other: Any) -> Any:
         """Метод сравнения вакансий по зарплате - для оператора меньше или равно <="""
 
@@ -162,6 +175,7 @@ class Vacancy(VacancyWorker):
         else:
             raise TypeError
 
+    @func_call_logging
     def __gt__(self, other: Any) -> Any:
         """Метод сравнения вакансий по зарплате - для оператора больше >"""
 
@@ -170,6 +184,7 @@ class Vacancy(VacancyWorker):
         else:
             raise TypeError
 
+    @func_call_logging
     def __ge__(self, other: Any) -> Any:
         """Метод сравнения вакансий по зарплате - для оператора больше или равно >="""
 

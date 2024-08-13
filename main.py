@@ -1,12 +1,13 @@
 from src.api.hh import HH
 from src.vacancy_processing.vacancy import Vacancy
 import json
+# from src.logger_settings import logger
 from src.file_processing.json_worker import JSONWorker
 
 
 # Создание экземпляра класса для работы с API сайтов с вакансиями
 # hh_api = HH()
-
+# logger.info("Программа запущена")
 # Получение вакансий с hh.ru в формате JSON
 vacancies = HH.load_vacancies("Python")
 

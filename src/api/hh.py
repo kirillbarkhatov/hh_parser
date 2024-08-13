@@ -1,6 +1,7 @@
 import requests
 from src.api.abc_parser import Parser
 from typing import Any
+from src.logger_decorators import func_call_logging
 
 
 class HH(Parser):
@@ -10,6 +11,7 @@ class HH(Parser):
     """
 
     @staticmethod
+    @func_call_logging
     def __connection_to_api(api_params: dict) -> Any:
         """Приватный метод для подключения к API"""
 
@@ -22,16 +24,17 @@ class HH(Parser):
             raise requests.RequestException
         return response
 
-    @staticmethod
-    def load_vacancies(keyword: str) -> dict:
+    @classmethod
+    @func_call_logging
+    def load_vacancies(cls, keyword: str) -> dict:
         """Метод для получения вакансий по ключевому слову"""
 
         params = {'text': keyword, 'page': 0, 'per_page': 100}
         vacancies = []
 
         # while params.get('page') != 20:
-        while params.get('page') != 1:
-            vacancies = HH.__connection_to_api(params).json()['items']
+        while params.get('page') != 20:
+            vacancies = cls.__connection_to_api(params).json()['items']
             vacancies.extend(vacancies)
             params['page'] += 1
 
