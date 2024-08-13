@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../Additional_Homeworks/.idea/Additional_Homeworks.iml" filepath="$PROJECT_DIR$/../Additional_Homeworks/.idea/Additional_Homeworks.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../SkyBank/.idea/SkyBank.iml" filepath="$PROJECT_DIR$/../SkyBank/.idea/SkyBank.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/hh_parser.iml" filepath="$PROJECT_DIR$/.idea/hh_parser.iml" />
       <module fileurl="file://$PROJECT_DIR$/../online-store/.idea/online-store.iml" filepath="$PROJECT_DIR$/../online-store/.idea/online-store.iml" />
     </modules>

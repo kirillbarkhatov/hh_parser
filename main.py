@@ -22,6 +22,10 @@ print(Vacancy.list_of_vacancies(vacancies))
 json_saver = JSONWorker()
 json_saver.save_to_file(Vacancy.list_of_dicts_vacancies(vacancies))
 
+print(json_saver.get_from_file()[-1])
+
+
+
 print(obj_vacancy.to_dict())
 print(obj_vacancy.__slots__)
 

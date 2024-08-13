@@ -91,6 +91,12 @@ class Vacancy(VacancyWorker):
 
         return attribute in self.__slots__
 
+    @staticmethod
+    def list_id_vacancies(vacancies: list[dict]):
+        """Получить список ID из списка вакансий"""
+
+        return [vacancy["id"] for vacancy in vacancies]
+
     def get_salary(self) -> str:
         """Получить значение зарплаты"""
 
