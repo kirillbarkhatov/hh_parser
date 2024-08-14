@@ -32,7 +32,7 @@ class Vacancy(VacancyWorker):
                 setattr(self, vacancy_attribute, self.__get_attribute_value(vacancy_attribute, vacancy))
 
     @staticmethod
-    # @func_call_logging
+    @func_call_logging
     def __get_attribute_value(attribute: str, vacancy: dict) -> Any:
         """Привязка мест хранения аттрибутов к месту хранения в JSON"""
 

@@ -1,5 +1,6 @@
 from src.api.hh import HH
 from src.file_processing.json_worker import JSONWorker
+from src.file_processing.excel_worker import ExcelWorker
 from src.vacancy_processing.vacancy import Vacancy
 from src.utils import file_data_info
 
@@ -58,8 +59,8 @@ class UI:
                 print(f"Данные успешно сохранены в файл {file_name}.csx")
 
             case 3:
-                json_saver = JSONWorker(file_name)
-                json_saver.save_to_file(Vacancy.list_of_dicts_vacancies(vacancies))
+                excel_saver = ExcelWorker(file_name)
+                excel_saver.save_to_file(Vacancy.list_of_dicts_vacancies(vacancies))
                 print(f"Данные успешно сохранены в файл {file_name}.xlsx")
 
             case 4:

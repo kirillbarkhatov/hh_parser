@@ -7,5 +7,6 @@
     <orderEntry type="module" module-name="online-store" />
     <orderEntry type="module" module-name="Additional_Homeworks" />
     <orderEntry type="module" module-name="SkyBank" />
+    <orderEntry type="module" module-name="bank_widget" />
   </component>
 </module>

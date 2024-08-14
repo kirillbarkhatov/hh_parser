@@ -43,10 +43,6 @@ class JSONWorker(FileWorker):
         print(len(vacancies_in_file))
         self.save_to_file(vacancies_in_file)
 
-        # add_vacancies = list(set(vacancies).difference(set(vacancies_in_file)))
-        # vacancies_in_file.extend(add_vacancies)
-        # self.save_to_file(vacancies_in_file)
-
     @func_call_logging
     def get_from_file(self) -> list[dict]:
         """Метод для получения данных из файла"""
