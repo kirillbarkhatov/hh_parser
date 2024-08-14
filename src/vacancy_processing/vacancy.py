@@ -21,7 +21,8 @@ class Vacancy(VacancyWorker):
     requirement: str  # требования (кратко)
     responsibility: str  # обязанности (кратко)
 
-    __slots__ = ("id", "name", "location", "address", "salary", "published_at", "url", "name_employer", "url_employer", "schedule", "employment", "experience", "requirement", "responsibility")
+    # __slots__ = ("id", "name", "location", "address", "salary", "published_at", "url", "name_employer", "url_employer", "schedule", "employment", "experience", "requirement", "responsibility")
+    __slots__ = ("id", "name", "location", "address", "salary", "published_at", "url", "name_employer", "schedule", "employment", "experience", "requirement", "responsibility")
 
     @func_call_logging
     def __init__(self, vacancy: dict) -> None:
@@ -31,7 +32,7 @@ class Vacancy(VacancyWorker):
                 setattr(self, vacancy_attribute, self.__get_attribute_value(vacancy_attribute, vacancy))
 
     @staticmethod
-    @func_call_logging
+    # @func_call_logging
     def __get_attribute_value(attribute: str, vacancy: dict) -> Any:
         """Привязка мест хранения аттрибутов к месту хранения в JSON"""
 

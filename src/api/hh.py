@@ -26,7 +26,7 @@ class HH(Parser):
 
     @classmethod
     @func_call_logging
-    def load_vacancies(cls, keyword: str) -> dict:
+    def load_vacancies(cls, keyword: str) -> list:
         """Метод для получения вакансий по ключевому слову"""
 
         params = {'text': keyword, 'page': 0, 'per_page': 100}
@@ -36,8 +36,10 @@ class HH(Parser):
         # while params.get('page') != 20:
         while params.get('page') != 20:
             print("#", end="")
-            vacancies = cls.__connection_to_api(params).json()['items']
-            vacancies.extend(vacancies)
+            vacancies_page = cls.__connection_to_api(params).json()['items']
+            # print(type(vacancies_page), len(vacancies_page))
+            vacancies.extend(vacancies_page)
+            # print(type(vacancies), len(vacancies))
             params['page'] += 1
-        print()
+        # print()
         return vacancies
