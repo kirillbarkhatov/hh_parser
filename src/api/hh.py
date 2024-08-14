@@ -32,10 +32,12 @@ class HH(Parser):
         params = {'text': keyword, 'page': 0, 'per_page': 100}
         vacancies = []
 
+        print("Загрузка данных ... ", end="")
         # while params.get('page') != 20:
         while params.get('page') != 20:
+            print("#", end="")
             vacancies = cls.__connection_to_api(params).json()['items']
             vacancies.extend(vacancies)
             params['page'] += 1
-
+        print()
         return vacancies

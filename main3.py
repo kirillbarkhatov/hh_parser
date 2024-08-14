@@ -1,4 +1,4 @@
 from src.utils import file_data_info
+from src.ui.ui import UI
 
-
-print(file_data_info())
+UI.greeting()

@@ -15,7 +15,7 @@ class JSONWorker(FileWorker):
 
     @func_call_logging
     def __init__(self, file_name: str = "vacancies.json") -> None:
-        self.__file_name = file_name
+        self.__file_name = self.__check_and_get_file_name(file_name)
 
     @func_call_logging
     def save_to_file(self, vacancies: list[dict]) -> None:
@@ -71,3 +71,9 @@ class JSONWorker(FileWorker):
                     continue
                 i += 1
             self.save_to_file(vacancies)
+
+    @func_call_logging
+    def __check_and_get_file_name(self, file_name: str) -> str:
+        if file_name[-5:] != ".json":
+            return f"{file_name}.json"
+        return file_name

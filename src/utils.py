@@ -24,5 +24,7 @@ def file_data_info() -> list:
             print(f"{file} - содержит {len(vacancies)} вакансий")
         except TypeError:
             print(f"{file} - файл не содержит данных о вакансиях или формат файла не поддерживается")
+        except FileNotFoundError:
+            print(f"{file} - файл не содержит данных о вакансиях или формат файла не поддерживается")
 
     return files

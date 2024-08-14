@@ -36,9 +36,3 @@ class VacancyWorker(ABC):
         """Получить значение зарплаты"""
 
         pass
-
-    @abstractmethod
-    def __get_salary_for_comparison(self) -> int:
-        """Получить значение зарплаты для сравнения. По умолчанию берется значение "от", если ничего не указано - 0"""
-
-        pass
