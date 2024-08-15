@@ -15,7 +15,7 @@ class Vacancy(VacancyWorker):
     published_at: str  # дата публикации строкой вида "2024-08-04T18:37:39+0300"
     url: str  # ссылка на вакансию
     name_employer: str  # название работодателя
-    url_employer: str  # ссылка на страницу работодателя
+    # url_employer: str  # ссылка на страницу работодателя - появилась ошибка после добавления excel
     schedule: str  # формат работы
     employment: str  # занятость
     experience: str  # опыт
