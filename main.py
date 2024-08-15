@@ -1,42 +1,42 @@
-import json
-
-from src.api.hh import HH
-# from src.logger_settings import logger
-from src.file_processing.json_worker import JSONWorker
-from src.vacancy_processing.vacancy import Vacancy
-
-# Создание экземпляра класса для работы с API сайтов с вакансиями
-# hh_api = HH()
-# logger.info("Программа запущена")
-# Получение вакансий с hh.ru в формате JSON
-vacancies = HH.load_vacancies("Python")
-
-print(vacancies[-1])
-print(json.dumps(vacancies[-1], indent=4, ensure_ascii=False))
-
-obj_vacancy = Vacancy(vacancies[-1])
-obj_vacancy2 = Vacancy(vacancies[-2])
-
-
-a = 3
-print(Vacancy.list_of_vacancies(vacancies))
-json_saver = JSONWorker()
-json_saver.save_to_file(Vacancy.list_of_dicts_vacancies(vacancies))
-
-print(json_saver.get_from_file()[-1])
-
-
-print(obj_vacancy.to_dict())
-print(obj_vacancy.__slots__)
-
-print(obj_vacancy.get_salary())
-print(obj_vacancy2.get_salary())
-print(obj_vacancy == obj_vacancy2)
-print(obj_vacancy != obj_vacancy2)
-print(obj_vacancy < obj_vacancy2)
-print(obj_vacancy <= obj_vacancy2)
-print(obj_vacancy > obj_vacancy2)
-print(obj_vacancy >= obj_vacancy2)
+# import json
+#
+# from src.api.hh import HH
+# # from src.logger_settings import logger
+# from src.file_processing.json_worker import JSONWorker
+# from src.vacancy_processing.vacancy import Vacancy
+#
+# # Создание экземпляра класса для работы с API сайтов с вакансиями
+# # hh_api = HH()
+# # logger.info("Программа запущена")
+# # Получение вакансий с hh.ru в формате JSON
+# vacancies = HH.load_vacancies("Python")
+#
+# print(vacancies[-1])
+# print(json.dumps(vacancies[-1], indent=4, ensure_ascii=False))
+#
+# obj_vacancy = Vacancy(vacancies[-1])
+# obj_vacancy2 = Vacancy(vacancies[-2])
+#
+#
+# a = 3
+# print(Vacancy.list_of_vacancies(vacancies))
+# json_saver = JSONWorker()
+# json_saver.save_to_file(Vacancy.list_of_dicts_vacancies(vacancies))
+#
+# print(json_saver.get_from_file()[-1])
+#
+#
+# print(obj_vacancy.to_dict())
+# print(obj_vacancy.__slots__)
+#
+# print(obj_vacancy.get_salary())
+# print(obj_vacancy2.get_salary())
+# print(obj_vacancy == obj_vacancy2)
+# print(obj_vacancy != obj_vacancy2)
+# print(obj_vacancy < obj_vacancy2)
+# print(obj_vacancy <= obj_vacancy2)
+# print(obj_vacancy > obj_vacancy2)
+# print(obj_vacancy >= obj_vacancy2)
 
 # print(vars())
 
