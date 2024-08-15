@@ -1,8 +1,7 @@
 import os
-from src.logger_decorators import func_call_logging
-
 
 from src.file_processing.json_worker import JSONWorker
+from src.logger_decorators import func_call_logging
 from src.vacancy_processing.vacancy import Vacancy
 
 

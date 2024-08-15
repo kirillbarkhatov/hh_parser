@@ -26,7 +26,7 @@ class VacancyWorker(ABC):
 
     @staticmethod
     @abstractmethod
-    def list_id_vacancies(vacancies: list[dict]):
+    def list_id_vacancies(vacancies: list[dict]) -> list:
         """Получить список ID из списка вакансий"""
 
         pass

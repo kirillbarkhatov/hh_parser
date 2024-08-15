@@ -1,5 +1,5 @@
-from src.file_processing.json_worker import JSONWorker
 from src.api.hh import HH
+from src.file_processing.json_worker import JSONWorker
 from src.vacancy_processing.vacancy import Vacancy
 
 json_worker = JSONWorker()

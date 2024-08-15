@@ -1,6 +1,7 @@
 from typing import Any
-from src.vacancy_processing.abc_vacancy_worker import VacancyWorker
+
 from src.logger_decorators import func_call_logging
+from src.vacancy_processing.abc_vacancy_worker import VacancyWorker
 
 
 class Vacancy(VacancyWorker):
@@ -21,8 +22,23 @@ class Vacancy(VacancyWorker):
     requirement: str  # требования (кратко)
     responsibility: str  # обязанности (кратко)
 
-    # __slots__ = ("id", "name", "location", "address", "salary", "published_at", "url", "name_employer", "url_employer", "schedule", "employment", "experience", "requirement", "responsibility")
-    __slots__ = ("id", "name", "location", "address", "salary", "published_at", "url", "name_employer", "schedule", "employment", "experience", "requirement", "responsibility")
+    # __slots__ = ("id", "name", "location", "address", "salary", "published_at", "url", "name_employer",
+    # "url_employer", "schedule", "employment", "experience", "requirement", "responsibility")
+    __slots__ = (
+        "id",
+        "name",
+        "location",
+        "address",
+        "salary",
+        "published_at",
+        "url",
+        "name_employer",
+        "schedule",
+        "employment",
+        "experience",
+        "requirement",
+        "responsibility",
+    )
 
     @func_call_logging
     def __init__(self, vacancy: dict) -> None:
@@ -94,14 +110,14 @@ class Vacancy(VacancyWorker):
         return [vacancy.to_dict() for vacancy in Vacancy.list_of_vacancies(vacancies)]
 
     @func_call_logging
-    def __check_attribute(self, attribute) -> Any:
+    def __check_attribute(self, attribute: Any) -> Any:
         """Валидация аттрибутов при создании объекта класса"""
 
         return attribute in self.__slots__
 
     @staticmethod
     @func_call_logging
-    def list_id_vacancies(vacancies: list[dict]):
+    def list_id_vacancies(vacancies: list[dict]) -> list[dict]:
         """Получить список ID из списка вакансий"""
 
         return [vacancy["id"] for vacancy in vacancies]
@@ -125,7 +141,7 @@ class Vacancy(VacancyWorker):
         return f"От {self.salary["from"]} до {self.salary["to"]}"
 
     @func_call_logging
-    def __get_salary_for_comparison(self) -> int:
+    def __get_salary_for_comparison(self) -> Any:
         """Получить значение зарплаты для сравнения. По умолчанию берется значение "от", если ничего не указано - 0"""
 
         if not self.salary:

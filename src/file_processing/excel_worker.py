@@ -1,15 +1,16 @@
+import json
 from typing import Any
 
-from src.file_processing.abc_file_worker import FileWorker
-from src.vacancy_processing.vacancy import Vacancy
-from src.logger_decorators import func_call_logging
-
-import json
 import pandas as pd
+
+from src.file_processing.abc_file_worker import FileWorker
+from src.logger_decorators import func_call_logging
+from src.vacancy_processing.vacancy import Vacancy
 
 
 class ExcelWorker(FileWorker):
     """Класс для работы с json файлами"""
+
     __file_name: str  # имя файла
     path_to_file: str = "data/"  # путь до файла
     path_with_filename: str  # путь до файла вместе с именем файла
@@ -25,7 +26,7 @@ class ExcelWorker(FileWorker):
         vacancies_flat = pd.json_normalize(vacancies)
 
         # with open(self.path_to_file+self.__file_name, "w") as file:
-        vacancies_flat.to_excel(self.path_to_file+self.__file_name)
+        vacancies_flat.to_excel(self.path_to_file + self.__file_name)
 
     @func_call_logging
     def add_to_file(self, vacancies: list[dict]) -> None:
@@ -47,10 +48,10 @@ class ExcelWorker(FileWorker):
         self.save_to_file(vacancies_in_file)
 
     @func_call_logging
-    def get_from_file(self) -> list[dict]:
+    def get_from_file(self) -> Any:
         """Метод для получения данных из файла"""
 
-        with open(self.path_to_file+self.__file_name, "r") as file:
+        with open(self.path_to_file + self.__file_name, "r") as file:
             return json.load(file)
 
     @func_call_logging

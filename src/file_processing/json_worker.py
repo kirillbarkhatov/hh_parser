@@ -1,14 +1,14 @@
+import json
 from typing import Any
 
 from src.file_processing.abc_file_worker import FileWorker
-from src.vacancy_processing.vacancy import Vacancy
 from src.logger_decorators import func_call_logging
-
-import json
+from src.vacancy_processing.vacancy import Vacancy
 
 
 class JSONWorker(FileWorker):
     """Класс для работы с json файлами"""
+
     __file_name: str  # имя файла
     path_to_file: str = "data/"  # путь до файла
     path_with_filename: str  # путь до файла вместе с именем файла
@@ -21,7 +21,7 @@ class JSONWorker(FileWorker):
     def save_to_file(self, vacancies: list[dict]) -> None:
         """Метод для сохранения в файл списка вакансий"""
 
-        with open(self.path_to_file+self.__file_name, "w") as file:
+        with open(self.path_to_file + self.__file_name, "w") as file:
             json.dump(vacancies, file, indent=4, ensure_ascii=False)
 
     @func_call_logging
@@ -44,10 +44,10 @@ class JSONWorker(FileWorker):
         self.save_to_file(vacancies_in_file)
 
     @func_call_logging
-    def get_from_file(self) -> list[dict]:
+    def get_from_file(self) -> Any:
         """Метод для получения данных из файла"""
 
-        with open(self.path_to_file+self.__file_name, "r") as file:
+        with open(self.path_to_file + self.__file_name, "r") as file:
             return json.load(file)
 
     @func_call_logging

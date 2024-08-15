@@ -1,14 +1,14 @@
 from src.api.hh import HH
-from src.file_processing.json_worker import JSONWorker
 from src.file_processing.excel_worker import ExcelWorker
-from src.vacancy_processing.vacancy import Vacancy
+from src.file_processing.json_worker import JSONWorker
 from src.utils import file_data_info
+from src.vacancy_processing.vacancy import Vacancy
 
 
 class UI:
 
     @staticmethod
-    def greeting():
+    def greeting() -> None:
         """Функция приветствия"""
 
         print("Программа для получения вакансий с сайта hh.ru и работы с ними")
@@ -28,7 +28,7 @@ class UI:
                 file_data_info()
 
     @staticmethod
-    def get_hh_vacancy():
+    def get_hh_vacancy() -> None:
         """Функция интерфейса для выбора опций загрузки данных о вакансиях"""
 
         query_key_word = input("Введите ключевое слово для запроса: ")

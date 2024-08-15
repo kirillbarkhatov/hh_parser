@@ -12,7 +12,7 @@ class Parser(ABC):
 
         pass
 
-    @staticmethod
+    @classmethod
     @abstractmethod
     def load_vacancies(cls, keyword: str) -> dict:
         """Метод для получения вакансий по ключевому слову"""

@@ -1,9 +1,9 @@
-from src.api.hh import HH
-from src.vacancy_processing.vacancy import Vacancy
 import json
+
+from src.api.hh import HH
 # from src.logger_settings import logger
 from src.file_processing.json_worker import JSONWorker
-
+from src.vacancy_processing.vacancy import Vacancy
 
 # Создание экземпляра класса для работы с API сайтов с вакансиями
 # hh_api = HH()
@@ -24,7 +24,6 @@ json_saver = JSONWorker()
 json_saver.save_to_file(Vacancy.list_of_dicts_vacancies(vacancies))
 
 print(json_saver.get_from_file()[-1])
-
 
 
 print(obj_vacancy.to_dict())
@@ -71,4 +70,3 @@ print(obj_vacancy >= obj_vacancy2)
 #
 # if __name__ == "__main__":
 #     user_interaction()
-
