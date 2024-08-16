@@ -10,8 +10,10 @@ class Vacancy(VacancyWorker):
     id: int  # уникальный идентификатор вакансии
     name: str  # название вакансии
     location: str  # город, населенный пункт, область, страна
-    address: dict  # точный адрес работы (если указан)
-    salary: dict  # данные по зарплате, ключи "from", "to", "currency", "gross"
+    address: dict  # точный адрес работы (если указан)  - сложная вложенность - отказываюсь
+    salary: float # Приведенное значение зарплаты для сравнения
+    salary_string: str # Диапозон или комментарий по зарплате
+    # salary: dict  # данные по зарплате, ключи "from", "to", "currency", "gross" - сложная вложенность - отказываюсь
     published_at: str  # дата публикации строкой вида "2024-08-04T18:37:39+0300"
     url: str  # ссылка на вакансию
     name_employer: str  # название работодателя
@@ -22,14 +24,15 @@ class Vacancy(VacancyWorker):
     requirement: str  # требования (кратко)
     responsibility: str  # обязанности (кратко)
 
+    # набор, от которого отказался
     # __slots__ = ("id", "name", "location", "address", "salary", "published_at", "url", "name_employer",
     # "url_employer", "schedule", "employment", "experience", "requirement", "responsibility")
     __slots__ = (
         "id",
         "name",
         "location",
-        "address",
         "salary",
+        "salary_string",
         "published_at",
         "url",
         "name_employer",
@@ -59,8 +62,9 @@ class Vacancy(VacancyWorker):
                 return vacancy["name"]
             case "location":
                 return vacancy["area"]["name"]
-            case "address":
-                return vacancy["address"]
+            # от адреса отказался
+            # case "address":
+            #     return vacancy["address"]
             case "salary":
                 return vacancy["salary"]
             case "published_at":
@@ -210,3 +214,108 @@ class Vacancy(VacancyWorker):
             return self.__get_salary_for_comparison() >= other.__get_salary_for_comparison()
         else:
             raise TypeError
+
+    @func_call_logging
+    @staticmethod
+    def get_top_salary_vacancies(vacancies: dict, top_N: int) -> list:
+        """Получить топ вакансий по зарплате в заданном количестве"""
+
+        vacancies_obj = Vacancy.list_of_vacancies(vacancies)
+
+        sorted(vacancies_obj, key=Vacancy.__get_salary_for_comparison(), reverse=True)
+
+        print(vacancies_obj[:top_N])
+
+    @classmethod
+    @func_call_logging
+    def vacancies_from_hh_processing(cls, vacancies: list[dict]) -> list[dict]:
+        """Приведение данных от hh к формату для дальнейшей обработки"""
+
+        vacancies_processing = []
+        for vacancy in vacancies:
+            vacancy_processing = {}
+            for key in cls.__slots__:
+                vacancy_processing[key] = cls.__get_attribute_value_from_hh(key, vacancy)
+
+            vacancies_processing.append(vacancy_processing)
+        return vacancies_processing
+
+    @staticmethod
+    @func_call_logging
+    def __get_attribute_value_from_hh(attribute: str, vacancy: dict) -> Any:
+        """Привязка мест хранения аттрибутов в данных от hh"""
+
+        match attribute:
+            case "id":
+                return vacancy["id"]
+
+            case "name":
+                return vacancy["name"]
+
+            case "location":
+                return vacancy["area"]["name"]
+
+            # от адреса отказался
+            # case "address":
+            #     return vacancy["address"]
+
+            case "salary":
+                if not vacancy["salary"]:
+                    return 0
+
+                if not vacancy["salary"]["from"] and not vacancy["salary"]["to"]:
+                    return 0
+
+                if not vacancy["salary"]["from"]:
+                    return vacancy["salary"]["to"]
+
+                if not vacancy["salary"]["to"]:
+                    return vacancy["salary"]["from"]
+
+                return min(vacancy["salary"]["from"], vacancy["salary"]["to"])
+
+            case "salary_string":
+                if not vacancy["salary"]:
+                    return "Зарплата не указана"
+
+                if not vacancy["salary"]["from"] and not vacancy["salary"]["to"]:
+                    return "Зарплата не указана"
+
+                if not vacancy["salary"]["from"]:
+                    return f"До {vacancy["salary"]["to"]}"
+
+                if not vacancy["salary"]["to"]:
+                    return f"От {vacancy["salary"]["from"]}"
+
+                return f"От {vacancy["salary"]["from"]} до {vacancy["salary"]["to"]}"
+
+            case "published_at":
+                    return vacancy["published_at"]
+
+            case "url":
+                return vacancy["alternate_url"]
+
+            case "name_employer":
+                return vacancy["employer"]["name"]
+
+            # Пока отказался
+            # case "url_employer":
+            #     return vacancy["employer"]["alternate_url"]
+
+            case "schedule":
+                return vacancy["schedule"]["name"]
+
+            case "employment":
+                return vacancy["employment"]["name"]
+
+            case "experience":
+                return vacancy["experience"]["name"]
+
+            case "requirement":
+                return vacancy["snippet"]["requirement"]
+
+            case "responsibility":
+                return vacancy["snippet"]["responsibility"]
+
+            case _:
+                return None

@@ -36,7 +36,7 @@ class HH(Parser):
 
         print("Загрузка данных ... ", end="")
         # while params.get('page') != 20:
-        while params.get("page") != 20:
+        while params.get("page") != 1:
             print("#", end="")
             vacancies_page = cls.__connection_to_api(params).json()["items"]
             # print(type(vacancies_page), len(vacancies_page))
