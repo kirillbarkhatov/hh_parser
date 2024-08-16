@@ -12,21 +12,21 @@ class VacancyWorker(ABC):
 
     @staticmethod
     @abstractmethod
-    def list_of_vacancies(vacancies: dict) -> list:
+    def get_list_of_vacancies(vacancies: dict) -> list:
         """Создание списка из объектов класса Vacancy"""
 
         pass
 
     @staticmethod
     @abstractmethod
-    def list_of_dicts_vacancies(vacancies: dict) -> list:
+    def get_list_of_dicts_vacancies(vacancies: dict) -> list:
         """Создание списка словарей из списка объектов вакансий"""
 
         pass
 
     @staticmethod
     @abstractmethod
-    def list_id_vacancies(vacancies: list[dict]) -> list:
+    def get_list_id_vacancies(vacancies: list[dict]) -> list:
         """Получить список ID из списка вакансий"""
 
         pass

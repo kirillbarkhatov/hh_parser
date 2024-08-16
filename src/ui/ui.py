@@ -50,20 +50,20 @@ class UI:
         match file_format:
             case 1:
                 json_saver = JSONWorker(file_name)
-                json_saver.save_to_file(Vacancy.list_of_dicts_vacancies(vacancies))
+                json_saver.save_to_file(Vacancy.get_list_of_dicts_vacancies(vacancies))
                 print(f"Данные успешно сохранены в файл {file_name}.json")
 
             case 2:
                 json_saver = JSONWorker(file_name)
-                json_saver.save_to_file(Vacancy.list_of_dicts_vacancies(vacancies))
+                json_saver.save_to_file(Vacancy.get_list_of_dicts_vacancies(vacancies))
                 print(f"Данные успешно сохранены в файл {file_name}.csx")
 
             case 3:
                 excel_saver = ExcelWorker(file_name)
-                excel_saver.save_to_file(Vacancy.list_of_dicts_vacancies(vacancies))
+                excel_saver.save_to_file(Vacancy.get_list_of_dicts_vacancies(vacancies))
                 print(f"Данные успешно сохранены в файл {file_name}.xlsx")
 
             case 4:
                 json_saver = JSONWorker(file_name)
-                json_saver.save_to_file(Vacancy.list_of_dicts_vacancies(vacancies))
+                json_saver.save_to_file(Vacancy.get_list_of_dicts_vacancies(vacancies))
                 print(f"Данные успешно сохранены в файл {file_name}.txt")

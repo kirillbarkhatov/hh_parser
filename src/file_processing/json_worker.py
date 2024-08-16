@@ -29,8 +29,8 @@ class JSONWorker(FileWorker):
         """Метод для добавления в файл вакансий без дублирования"""
 
         vacancies_in_file = self.get_from_file()
-        ids_vacancies = Vacancy.list_id_vacancies(vacancies)
-        ids_vacancies_in_file = Vacancy.list_id_vacancies(vacancies_in_file)
+        ids_vacancies = Vacancy.get_list_id_vacancies(vacancies)
+        ids_vacancies_in_file = Vacancy.get_list_id_vacancies(vacancies_in_file)
 
         print(ids_vacancies)
         print(ids_vacancies_in_file)

@@ -12,7 +12,7 @@ class Vacancy(VacancyWorker):
     location: str  # город, населенный пункт, область, страна
     address: dict  # точный адрес работы (если указан)  - сложная вложенность - отказываюсь
     salary: float # Приведенное значение зарплаты для сравнения
-    salary_string: str # Диапозон или комментарий по зарплате
+    salary_string: str # Диапазон или комментарий по зарплате
     # salary: dict  # данные по зарплате, ключи "from", "to", "currency", "gross" - сложная вложенность - отказываюсь
     published_at: str  # дата публикации строкой вида "2024-08-04T18:37:39+0300"
     url: str  # ссылка на вакансию
@@ -45,48 +45,54 @@ class Vacancy(VacancyWorker):
 
     @func_call_logging
     def __init__(self, vacancy: dict) -> None:
+        """На вход конструктора ожидается словарь с ключами, аналогичными в __slots__
+        В классе реализованы методы, позволяющие обработать данные от hh для приведения их в нужный вид
+        """
 
         for vacancy_attribute in self.__slots__:
             if self.__check_attribute(vacancy_attribute):
-                setattr(self, vacancy_attribute, self.__get_attribute_value(vacancy_attribute, vacancy))
+                setattr(self, vacancy_attribute, vacancy[vacancy_attribute])
+            else:
+                setattr(self,vacancy_attribute, None)
 
-    @staticmethod
-    @func_call_logging
-    def __get_attribute_value(attribute: str, vacancy: dict) -> Any:
-        """Привязка мест хранения аттрибутов к месту хранения в JSON"""
-
-        match attribute:
-            case "id":
-                return vacancy["id"]
-            case "name":
-                return vacancy["name"]
-            case "location":
-                return vacancy["area"]["name"]
-            # от адреса отказался
-            # case "address":
-            #     return vacancy["address"]
-            case "salary":
-                return vacancy["salary"]
-            case "published_at":
-                return vacancy["published_at"]
-            case "url":
-                return vacancy["alternate_url"]
-            case "name_employer":
-                return vacancy["employer"]["name"]
-            case "url_employer":
-                return vacancy["employer"]["alternate_url"]
-            case "schedule":
-                return vacancy["schedule"]["name"]
-            case "employment":
-                return vacancy["employment"]["name"]
-            case "experience":
-                return vacancy["experience"]["name"]
-            case "requirement":
-                return vacancy["snippet"]["requirement"]
-            case "responsibility":
-                return vacancy["snippet"]["responsibility"]
-            case _:
-                return None
+    # Неактуальный метод
+    # @staticmethod
+    # @func_call_logging
+    # def __get_attribute_value(attribute: str, vacancy: dict) -> Any:
+    #     """Привязка мест хранения аттрибутов к месту хранения в JSON"""
+    #
+    #     match attribute:
+    #         case "id":
+    #             return vacancy["id"]
+    #         case "name":
+    #             return vacancy["name"]
+    #         case "location":
+    #             return vacancy["area"]["name"]
+    #         # от адреса отказался
+    #         # case "address":
+    #         #     return vacancy["address"]
+    #         case "salary":
+    #             return vacancy["salary"]
+    #         case "published_at":
+    #             return vacancy["published_at"]
+    #         case "url":
+    #             return vacancy["alternate_url"]
+    #         case "name_employer":
+    #             return vacancy["employer"]["name"]
+    #         case "url_employer":
+    #             return vacancy["employer"]["alternate_url"]
+    #         case "schedule":
+    #             return vacancy["schedule"]["name"]
+    #         case "employment":
+    #             return vacancy["employment"]["name"]
+    #         case "experience":
+    #             return vacancy["experience"]["name"]
+    #         case "requirement":
+    #             return vacancy["snippet"]["requirement"]
+    #         case "responsibility":
+    #             return vacancy["snippet"]["responsibility"]
+    #         case _:
+    #             return None
 
     @func_call_logging
     def to_dict(self) -> dict:
@@ -101,17 +107,17 @@ class Vacancy(VacancyWorker):
 
     @staticmethod
     @func_call_logging
-    def list_of_vacancies(vacancies: dict) -> list:
+    def get_list_of_vacancies(vacancies: list[dict]) -> list:
         """Создание списка из объектов класса Vacancy"""
 
         return [Vacancy(vacancy) for vacancy in vacancies]
 
     @staticmethod
     @func_call_logging
-    def list_of_dicts_vacancies(vacancies: dict) -> list:
+    def get_list_of_dicts_vacancies(vacancies: list) -> list:
         """Создание списка словарей из списка объектов вакансий"""
 
-        return [vacancy.to_dict() for vacancy in Vacancy.list_of_vacancies(vacancies)]
+        return [vacancy.to_dict() for vacancy in vacancies]
 
     @func_call_logging
     def __check_attribute(self, attribute: Any) -> Any:
@@ -121,46 +127,22 @@ class Vacancy(VacancyWorker):
 
     @staticmethod
     @func_call_logging
-    def list_id_vacancies(vacancies: list[dict]) -> list[dict]:
-        """Получить список ID из списка вакансий"""
+    def get_list_id_vacancies(vacancies: list) -> list:
+        """Получить список ID из списка вакансий (объектов или словарей)"""
 
-        return [vacancy["id"] for vacancy in vacancies]
+        return [vacancy.id if isinstance(vacancy, Vacancy) else vacancy["id"] for vacancy in vacancies]
 
     @func_call_logging
     def get_salary(self) -> str:
         """Получить значение зарплаты"""
 
-        if not self.salary:
-            return "Зарплата не указана"
-
-        if not self.salary["from"] and not self.salary["to"]:
-            return "Зарплата не указана"
-
-        if not self.salary["from"]:
-            return f"До {self.salary["to"]}"
-
-        if not self.salary["to"]:
-            return f"От {self.salary["from"]}"
-
-        return f"От {self.salary["from"]} до {self.salary["to"]}"
+        return self.salary_string
 
     @func_call_logging
     def __get_salary_for_comparison(self) -> Any:
         """Получить значение зарплаты для сравнения. По умолчанию берется значение "от", если ничего не указано - 0"""
 
-        if not self.salary:
-            return 0
-
-        if not self.salary["from"] and not self.salary["to"]:
-            return 0
-
-        if not self.salary["from"]:
-            return self.salary["to"]
-
-        if not self.salary["to"]:
-            return self.salary["from"]
-
-        return min(self.salary["from"], self.salary["to"])
+        return self.salary
 
     @func_call_logging
     def __eq__(self, other: Any) -> Any:
@@ -215,16 +197,38 @@ class Vacancy(VacancyWorker):
         else:
             raise TypeError
 
-    @func_call_logging
     @staticmethod
-    def get_top_salary_vacancies(vacancies: dict, top_N: int) -> list:
+    @func_call_logging
+    def get_top_salary_vacancies(vacancies: list, top_n: int) -> list:
         """Получить топ вакансий по зарплате в заданном количестве"""
 
-        vacancies_obj = Vacancy.list_of_vacancies(vacancies)
+        if isinstance(vacancies[0], Vacancy):
+            sorted_vacancies = sorted(vacancies, key=lambda x: x.salary, reverse=True)
+        else:
+            sorted_vacancies = sorted(vacancies, key=lambda x: x["salary"], reverse=True)
 
-        sorted(vacancies_obj, key=Vacancy.__get_salary_for_comparison(), reverse=True)
+        return sorted_vacancies[:top_n]
 
-        print(vacancies_obj[:top_N])
+
+    @staticmethod
+    @func_call_logging
+    def filter_by_keywords(vacancies: list, keywords: list) -> list:
+        """Оставляет в списке только те вакансии, которые содержат ключевые слова в названии,
+        требованиях или обязанностях
+        """
+
+        filtered_vacancies =[]
+        for vacancy in vacancies:
+            for keyword in keywords:
+                if isinstance(vacancy, Vacancy):
+                    if keyword in vacancy.name + str(vacancy.requirement) + str(vacancy.responsibility):
+                        filtered_vacancies.append(vacancy)
+                else:
+                    if keyword in vacancy["name"] + str(vacancy["requirement"]) + str(vacancy["responsibility"]):
+                        filtered_vacancies.append(vacancy)
+
+        return filtered_vacancies
+
 
     @classmethod
     @func_call_logging

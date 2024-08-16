@@ -19,7 +19,7 @@ def file_data_info() -> list:
         try:
             checking_file = JSONWorker(file)
             file_data = checking_file.get_from_file()
-            vacancies = Vacancy.list_id_vacancies(file_data)
+            vacancies = Vacancy.get_list_id_vacancies(file_data)
             print(f"{file} - содержит {len(vacancies)} вакансий")
         except TypeError:
             print(f"{file} - файл не содержит данных о вакансиях или формат файла не поддерживается")
