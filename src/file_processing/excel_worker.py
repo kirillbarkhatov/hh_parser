@@ -24,46 +24,51 @@ class ExcelWorker(FileWorker):
     def save_to_file(self, vacancies: list[dict]) -> None:
         """Метод для сохранения в файл списка вакансий"""
 
-        vacancies_flat = pd.json_normalize(vacancies)
+        # vacancies_flat = pd.json_normalize(vacancies)
 
         # with open(self.path_to_file+self.__file_name, "w") as file:
-        vacancies_flat.to_excel(self.path_to_file + self.__file_name)
+        pd.DataFrame(vacancies).to_excel(self.path_to_file + self.__file_name, index=False)
 
     # @func_call_logging
     def add_to_file(self, vacancies: list[dict]) -> None:
         """Метод для добавления в файл вакансий без дублирования"""
 
-        vacancies_flat = pd.json_normalize(vacancies)
-        vacancies_in_file = self.get_from_file()
-        vacancies_to_file = pd.concat([vacancies_in_file, vacancies_flat], ignore_index=True).drop_duplicates(subset=["id"])
-        vacancies_to_file.to_excel(self.path_to_file + self.__file_name)
+        # vacancies_in_file = self.get_from_file()
+        # ids_vacancies = Vacancy.get_list_id_vacancies(vacancies)
+        # ids_vacancies_in_file = Vacancy.get_list_id_vacancies(vacancies_in_file)
+        #
+        # print(ids_vacancies)
+        # print(ids_vacancies_in_file)
+        # add_id_vacancies = list(set(ids_vacancies).difference(set(ids_vacancies_in_file)))
+        # print(add_id_vacancies)
+        # for vacancy_id in add_id_vacancies:
+        #     i = ids_vacancies.index(vacancy_id)
+        #     vacancies_in_file.append(vacancies[i])
+        #
+        # print(len(vacancies_in_file))
+        # self.save_to_file(vacancies_in_file)
 
 
-    # @func_call_logging
+        vacancies_in_file = pd.read_excel(self.path_to_file + self.__file_name)
+        vacancies_in_file["id"] = vacancies_in_file["id"].astype(str)
+        vacancies_to_add = pd.DataFrame(vacancies)
+        vacancies_to_file = pd.concat([vacancies_in_file, vacancies_to_add], ignore_index=True).drop_duplicates(subset=["id"])
+        vacancies_to_file.to_excel(self.path_to_file + self.__file_name, index=False)
+
+
+    @func_call_logging
     def get_from_file(self) -> Any:
         """Метод для получения данных из файла"""
 
-        df = pd.read_excel(self.path_to_file + self.__file_name)[:5]
-        return df
+        df = pd.read_excel(self.path_to_file + self.__file_name)
+        return df.to_dict(orient="records")
 
 
     # @func_call_logging
-    def delete_from_file(self, list_id_vacancies: list[str] | None = None) -> None:
-        """Общий функционал для удаления данных из файла"""
+    def delete_from_file(self) -> None:
+        """Удаляет все данные из файла"""
 
-        if not list_id_vacancies:
-            with open(self.path_to_file + self.__file_name, "w") as file:
-                json.dump(None, file, indent=4, ensure_ascii=False)
-
-        else:
-            vacancies = self.get_from_file()
-            i = 0
-            while i != len(vacancies):
-                if vacancies[i]["id"] in list_id_vacancies:
-                    vacancies.pop(i)
-                    continue
-                i += 1
-            self.save_to_file(vacancies)
+        pd.DataFrame().to_excel(self.path_to_file + self.__file_name, index=False)
 
     # @func_call_logging
     def __check_and_get_file_name(self, file_name: str) -> str:

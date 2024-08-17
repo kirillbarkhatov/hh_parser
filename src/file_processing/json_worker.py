@@ -32,15 +32,15 @@ class JSONWorker(FileWorker):
         ids_vacancies = Vacancy.get_list_id_vacancies(vacancies)
         ids_vacancies_in_file = Vacancy.get_list_id_vacancies(vacancies_in_file)
 
-        print(ids_vacancies)
-        print(ids_vacancies_in_file)
+        # print(ids_vacancies)
+        # print(ids_vacancies_in_file)
         add_id_vacancies = list(set(ids_vacancies).difference(set(ids_vacancies_in_file)))
-        print(add_id_vacancies)
+        # print(add_id_vacancies)
         for vacancy_id in add_id_vacancies:
             i = ids_vacancies.index(vacancy_id)
             vacancies_in_file.append(vacancies[i])
 
-        print(len(vacancies_in_file))
+        # print(len(vacancies_in_file))
         self.save_to_file(vacancies_in_file)
 
     @func_call_logging
@@ -51,22 +51,25 @@ class JSONWorker(FileWorker):
             return json.load(file)
 
     @func_call_logging
-    def delete_from_file(self, list_id_vacancies: list[str] | None = None) -> None:
+    def delete_from_file(self) -> None:
         """Общий функционал для удаления данных из файла"""
 
-        if not list_id_vacancies:
-            with open(self.path_to_file + self.__file_name, "w") as file:
-                json.dump(None, file, indent=4, ensure_ascii=False)
+        self.save_to_file([])
 
-        else:
-            vacancies = self.get_from_file()
-            i = 0
-            while i != len(vacancies):
-                if vacancies[i]["id"] in list_id_vacancies:
-                    vacancies.pop(i)
-                    continue
-                i += 1
-            self.save_to_file(vacancies)
+        # Код для удаления вакансий из файла по списку id - в итоговой версии не применяется
+        # if not list_id_vacancies:
+        #     with open(self.path_to_file + self.__file_name, "w") as file:
+        #         json.dump(None, file, indent=4, ensure_ascii=False)
+        #
+        # else:
+        #     vacancies = self.get_from_file()
+        #     i = 0
+        #     while i != len(vacancies):
+        #         if vacancies[i]["id"] in list_id_vacancies:
+        #             vacancies.pop(i)
+        #             continue
+        #         i += 1
+        #     self.save_to_file(vacancies)
 
     @func_call_logging
     def __check_and_get_file_name(self, file_name: str) -> str:

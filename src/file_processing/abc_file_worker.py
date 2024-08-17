@@ -23,7 +23,7 @@ class FileWorker(ABC):
         pass
 
     @abstractmethod
-    def delete_from_file(self, list_id_vacancies: list[str] | None = None) -> None:
+    def delete_from_file(self) -> None:
         """Общий функционал для удаления данных из файла"""
 
         pass
