@@ -8,6 +8,7 @@ from unittest.mock import patch
 def test_vacancy_base(vacancies):
     """Тест базового функционала класса, через методы list_of_vacancies и get_salary"""
 
+    vacancies = Vacancy.vacancies_from_hh_processing(vacancies)
     assert Vacancy.get_list_of_vacancies(vacancies)[0].get_salary() == "От 350000 до 450000"
     assert Vacancy.get_list_of_vacancies(vacancies)[5].get_salary() == "Зарплата не указана"
     assert Vacancy.get_list_of_vacancies(vacancies)[6].get_salary() == "От 800"
@@ -17,7 +18,9 @@ def test_vacancy_base(vacancies):
 def test_vacancy_dicts(vacancies):
     """Тесты методов создания словарей из объектов класса"""
 
+    vacancies = Vacancy.vacancies_from_hh_processing(vacancies)
     assert Vacancy.get_list_of_vacancies(vacancies)[0].to_dict()["name"] == "Тестировщик комфорта квартир"
+    vacancies = Vacancy.get_list_of_vacancies(vacancies)
     assert Vacancy.get_list_of_dicts_vacancies(vacancies)[0]["name"] == "Тестировщик комфорта квартир"
     assert Vacancy.get_list_id_vacancies(vacancies)[0] == "93353083"
 
@@ -25,6 +28,7 @@ def test_vacancy_dicts(vacancies):
 def test_comparison(vacancies):
     """Тесты методов сравнения"""
 
+    vacancies = Vacancy.vacancies_from_hh_processing(vacancies)
     vcncs = Vacancy.get_list_of_vacancies(vacancies)
     assert vcncs[0] > vcncs[5]
     assert vcncs[0] >= vcncs[5]
@@ -37,6 +41,7 @@ def test_comparison(vacancies):
 def test_comparison_error(vacancies):
     """Тесты методов сравнения"""
 
+    vacancies = Vacancy.vacancies_from_hh_processing(vacancies)
     vcncs = Vacancy.get_list_of_vacancies(vacancies)
     with pytest.raises(TypeError):
         assert vcncs[0] > "1"

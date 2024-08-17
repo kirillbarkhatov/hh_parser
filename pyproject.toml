@@ -54,3 +54,18 @@ exclude = '''
 
 [tool.isort]
 line_length = 119
+
+[tool.coverage.run]
+omit = [
+    # omit anything in a .local directory anywhere
+#    "*/.local/*",
+    # omit everything in /usr
+#    "/usr/*",
+    # omit this single file
+    # не тестируем абстрактные классы и работу с пользователем
+    "src/vacancy_processing/abc_vacancy_worker.py",
+    "src/ui/abc_user_interface.py",
+    "src/api/abc_parser.py",
+    "src/vacancy_processing/abc_vacancy_worker.py",
+    "main.py"
+    ]
