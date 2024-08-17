@@ -3,8 +3,8 @@ from unittest.mock import patch
 import pytest
 import requests
 
-from src.api.hh import HH
 from src.api.abc_parser import Parser
+from src.api.hh import HH
 
 
 def test_load_vacancies(request_get, load_vacancies_result):
@@ -26,4 +26,3 @@ def test_abc_parser():
     Parser.load_vacancies("test")
     # parser = Parser()
     # parser._Parser__connection_to_api({"text": "keyword", "page": 0, "per_page": 100})
-

@@ -11,8 +11,8 @@ class Vacancy(VacancyWorker):
     name: str  # название вакансии
     location: str  # город, населенный пункт, область, страна
     address: dict  # точный адрес работы (если указан)  - сложная вложенность - отказываюсь
-    salary: float # Приведенное значение зарплаты для сравнения
-    salary_string: str # Диапазон или комментарий по зарплате
+    salary: float  # Приведенное значение зарплаты для сравнения
+    salary_string: str  # Диапазон или комментарий по зарплате
     # salary: dict  # данные по зарплате, ключи "from", "to", "currency", "gross" - сложная вложенность - отказываюсь
     published_at: str  # дата публикации строкой вида "2024-08-04T18:37:39+0300"
     url: str  # ссылка на вакансию
@@ -53,7 +53,7 @@ class Vacancy(VacancyWorker):
             if self.__check_attribute(vacancy_attribute, vacancy.keys()):
                 setattr(self, vacancy_attribute, vacancy[vacancy_attribute])
             else:
-                setattr(self,vacancy_attribute, None)
+                setattr(self, vacancy_attribute, None)
 
     def __str__(self) -> str:
         """Получение краткой информации о вакансии"""
@@ -175,7 +175,6 @@ class Vacancy(VacancyWorker):
 
         return sorted_vacancies[:top_n]
 
-
     @staticmethod
     @func_call_logging
     def filter_by_keywords(vacancies: list, keywords: list) -> list:
@@ -183,20 +182,19 @@ class Vacancy(VacancyWorker):
         требованиях или обязанностях
         """
 
-        filtered_vacancies =[]
+        filtered_vacancies = []
         for vacancy in vacancies:
             string_for_searching = (vacancy.name + str(vacancy.requirement) + str(vacancy.responsibility)).lower()
             check_status = True
             for keyword in keywords:
                 if keyword.lower() in string_for_searching:
-                    check_status *= True
+                    pass
                 else:
-                    check_status *= False
+                    check_status = False
             if check_status:
                 filtered_vacancies.append(vacancy)
 
         return filtered_vacancies
-
 
     @classmethod
     @func_call_logging
@@ -262,7 +260,7 @@ class Vacancy(VacancyWorker):
                 return f"От {vacancy["salary"]["from"]} до {vacancy["salary"]["to"]}"
 
             case "published_at":
-                    return vacancy["published_at"]
+                return vacancy["published_at"]
 
             case "url":
                 return vacancy["alternate_url"]

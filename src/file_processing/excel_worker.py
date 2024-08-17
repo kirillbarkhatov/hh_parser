@@ -1,11 +1,9 @@
-import json
 from typing import Any
 
 import pandas as pd
 
 from src.file_processing.abc_file_worker import FileWorker
 from src.logger_decorators import func_call_logging
-
 
 
 class ExcelWorker(FileWorker):
@@ -32,9 +30,10 @@ class ExcelWorker(FileWorker):
         vacancies_in_file = pd.read_excel(self.path_to_file + self.__file_name)
         vacancies_in_file["id"] = vacancies_in_file["id"].astype(str)
         vacancies_to_add = pd.DataFrame(vacancies)
-        vacancies_to_file = pd.concat([vacancies_in_file, vacancies_to_add], ignore_index=True).drop_duplicates(subset=["id"])
+        vacancies_to_file = pd.concat([vacancies_in_file, vacancies_to_add], ignore_index=True).drop_duplicates(
+            subset=["id"]
+        )
         vacancies_to_file.to_excel(self.path_to_file + self.__file_name, index=False)
-
 
     @func_call_logging
     def get_from_file(self) -> Any:
@@ -42,7 +41,6 @@ class ExcelWorker(FileWorker):
 
         df = pd.read_excel(self.path_to_file + self.__file_name)
         return df.to_dict(orient="records")
-
 
     # @func_call_logging
     def delete_from_file(self) -> None:

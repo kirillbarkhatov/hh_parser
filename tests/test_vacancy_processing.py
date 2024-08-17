@@ -1,8 +1,9 @@
-from src.vacancy_processing.vacancy import Vacancy
-from src.vacancy_processing.abc_vacancy_worker import VacancyWorker
+from unittest.mock import patch
+
 import pytest
 
-from unittest.mock import patch
+from src.vacancy_processing.abc_vacancy_worker import VacancyWorker
+from src.vacancy_processing.vacancy import Vacancy
 
 
 def test_vacancy_base(vacancies):
@@ -66,7 +67,10 @@ def test_vacancy_without_attribute(short_vacancy):
 def test_str_vacancy(vacancy):
     """Тест метода str"""
 
-    assert str(vacancy) == "Тестировщик комфорта квартир                                 - Зарплата: От 350000 до 450000  - Город: Воронеж              - График: Гибкий график"
+    assert (
+        str(vacancy)
+        == "Тестировщик комфорта квартир                                 - Зарплата: От 350000 до 450000  - Город: Воронеж              - График: Гибкий график"
+    )
 
 
 def test_get_top_salary_vacancies(vacancies):
@@ -80,7 +84,7 @@ def test_get_top_salary_vacancies(vacancies):
 
 
 def test_vacancy_worker(vacancies):
-    """ до 100% базовый абстрактный класс - вопрос наставнику: как закрыть тестом метод объекта класса"""
+    """до 100% базовый абстрактный класс - вопрос наставнику: как закрыть тестом метод объекта класса"""
 
     # vacancy = Vacancy()
     VacancyWorker.get_list_of_vacancies({})
@@ -92,5 +96,3 @@ def test_vacancy_worker(vacancies):
     with patch("src.vacancy_processing.abc_vacancy_worker.VacancyWorker.to_dict") as mock_method:
         mock_method.return_value = {}
         VacancyWorker.to_dict()
-
-

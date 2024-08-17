@@ -1,12 +1,10 @@
-from numpy.random import vonmises
+from typing import Any
 
 from src.api.hh import HH
 from src.file_processing.excel_worker import ExcelWorker
 from src.file_processing.json_worker import JSONWorker
 from src.utils import file_data_info
 from src.vacancy_processing.vacancy import Vacancy
-from tests.conftest import vacancies
-from typing import Any
 
 
 class UI:
@@ -18,7 +16,7 @@ class UI:
         print("Программа для получения вакансий с сайта hh.ru и работы с ними")
         print("Выберите действие:")
         print("1. Загрузить данные о вакансиях с сайта hh.ru по ключевому слову")
-        print('2. Получить информацию о ранее загруженных данных (хранятся в "data/", поддерживаемые форматы: json, xlsx)')
+        print('2. Получить инф-ю о ранее загруженных данных (хранятся в "data/", поддерживаемые форматы: json, xlsx)')
         choice = 0
 
         while choice not in [1, 2]:
@@ -66,7 +64,6 @@ class UI:
                 print(f"{i + 1}. {files[i]}")
             file_for_work = input("Введите имя требуемого файла: ")
             UI.file_working(file_for_work)
-
 
     @staticmethod
     def file_working(file_name: str) -> Any:
@@ -126,7 +123,11 @@ class UI:
             case 2:
                 while True:
                     try:
-                        n = int(input("Введите количество вакансий с максимальной зарплатой, которые надо отобрать из списка: "))
+                        n = int(
+                            input(
+                                "Введите кол-во вакансий с максимальной зарплатой, которые надо отобрать из списка: "
+                            )
+                        )
                         break
                     except ValueError:
                         print("Повторите ввод - укажите целое число")

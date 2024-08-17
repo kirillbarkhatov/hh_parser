@@ -13,4 +13,3 @@
 #         assert result.equals(get_transactions_from_xls("test"))
 #         mock_read_excel.assert_called_once_with("test")
 #
-

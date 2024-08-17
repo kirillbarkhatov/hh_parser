@@ -1,8 +1,7 @@
-import pytest
 import json
 
-from src.api.hh import HH
-from src.api.abc_parser import Parser
+import pytest
+
 from src.vacancy_processing.vacancy import Vacancy
 
 
