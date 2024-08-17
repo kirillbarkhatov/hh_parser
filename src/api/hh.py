@@ -31,7 +31,7 @@ class HH(Parser):
     def load_vacancies(cls, keyword: str) -> list:
         """Метод для получения вакансий по ключевому слову"""
 
-        params = {"text": keyword, "page": 0, "per_page": 100}
+        params = {"text": keyword, "page": 0, "per_page": 100, "area": 113}
         vacancies = []
 
         print("Загрузка данных ... ", end="")

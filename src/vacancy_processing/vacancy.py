@@ -55,6 +55,11 @@ class Vacancy(VacancyWorker):
             else:
                 setattr(self,vacancy_attribute, None)
 
+    def __str__(self) -> str:
+        """Получение краткой информации о вакансии"""
+
+        return f"{self.name} - Зарплата: {self.salary_string} - Город: {self.location} - График: {self.schedule}"
+
     # Неактуальный метод
     # @staticmethod
     # @func_call_logging
@@ -203,7 +208,7 @@ class Vacancy(VacancyWorker):
         """Получить топ вакансий по зарплате в заданном количестве"""
 
         if isinstance(vacancies[0], Vacancy):
-            sorted_vacancies = sorted(vacancies, key=lambda x: x.salary, reverse=True)
+            sorted_vacancies = sorted(vacancies, reverse=True)
         else:
             sorted_vacancies = sorted(vacancies, key=lambda x: x["salary"], reverse=True)
 
@@ -219,13 +224,15 @@ class Vacancy(VacancyWorker):
 
         filtered_vacancies =[]
         for vacancy in vacancies:
+            string_for_searching = (vacancy.name + str(vacancy.requirement) + str(vacancy.responsibility)).lower()
+            check_status = True
             for keyword in keywords:
-                if isinstance(vacancy, Vacancy):
-                    if keyword in vacancy.name + str(vacancy.requirement) + str(vacancy.responsibility):
-                        filtered_vacancies.append(vacancy)
+                if keyword.lower() in string_for_searching:
+                    check_status *= True
                 else:
-                    if keyword in vacancy["name"] + str(vacancy["requirement"]) + str(vacancy["responsibility"]):
-                        filtered_vacancies.append(vacancy)
+                    check_status *= False
+            if check_status:
+                filtered_vacancies.append(vacancy)
 
         return filtered_vacancies
 

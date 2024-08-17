@@ -1,8 +1,11 @@
+
 from src.api.hh import HH
 from src.file_processing.excel_worker import ExcelWorker
 from src.file_processing.json_worker import JSONWorker
 from src.utils import file_data_info
 from src.vacancy_processing.vacancy import Vacancy
+from tests.conftest import vacancies
+from typing import Any
 
 
 class UI:
@@ -14,7 +17,7 @@ class UI:
         print("Программа для получения вакансий с сайта hh.ru и работы с ними")
         print("Выберите действие:")
         print("1. Загрузить данные о вакансиях с сайта hh.ru по ключевому слову")
-        print('2. Получить информацию о ранее загруженных данных (хранятся в "data/"')
+        print('2. Получить информацию о ранее загруженных данных (хранятся в "data/", поддерживаемые форматы: json, xlsx)')
         choice = 0
         while choice not in [1, 2]:
             choice = int(input("Введите 1 или 2: "))
@@ -25,45 +28,133 @@ class UI:
             case 1:
                 UI.get_hh_vacancy()
             case 2:
-                file_data_info()
+                UI.files_info_and_choice()
+
 
     @staticmethod
-    def get_hh_vacancy() -> None:
-        """Функция интерфейса для выбора опций загрузки данных о вакансиях"""
+    def get_hh_vacancy() -> Any:
+        """Функция интерфейса для выбора опций загрузки данных о вакансиях c сайта hh.ru"""
 
         query_key_word = input("Введите ключевое слово для запроса: ")
-        print("Выберете формат файла в которых нужно сохранить полученные вакансии: ")
-        print("1. json")
-        print("2. csv")
-        print("3. excel")
-        print("4. txt")
+        vacancies = HH.load_vacancies(query_key_word)
+        vacancies_list = Vacancy.vacancies_from_hh_processing(vacancies)
+        vacancies_objects = Vacancy.get_list_of_vacancies(vacancies_list)
+        print()
+        print(f"Количество загруженных вакансий - {len(vacancies_objects)}")
+        return UI.vacancies_working(vacancies_objects)
 
-        file_format = 0
-        while file_format not in [1, 2, 3, 4]:
-            file_format = int(input("Введите цифру от 1 до 4 для выбора формата файла: "))
-            if file_format not in [1, 2, 3, 4]:
+    @staticmethod
+    def files_info_and_choice() -> None:
+        """Получение и вывод данных о файлах"""
+
+        files = file_data_info()
+        if len(files) == 0:
+            print("Доступные для работы файлы отсутствуют")
+        else:
+            print("Для дальнейшей работы доступны следующие файлы: ")
+            for i in range(len(files)):
+                print(f"{i + 1}. {files[i]}")
+            file_for_work = input("Введите имя требуемого файла: ")
+            UI.file_working(file_for_work)
+
+
+    @staticmethod
+    def file_working(file_name: str) -> Any:
+        """Функция интерфейса для выбора опций загрузки данных о вакансиях из файла"""
+
+        if file_name[-5:] == ".json":
+            file_worker = JSONWorker(file_name)
+        elif file_name[-5:] == ".xlsx":
+            file_worker = ExcelWorker(file_name)
+        else:
+            print("Неверно введено имя файла")
+            return UI.files_info_and_choice()
+
+        print("Доступные действия: ")
+        print("1. Загрузить все вакансии из файла")
+        print("2. Очистить файл")
+        choice = int(input("Выберите 1 или 2: "))
+        if choice == 1:
+            vacancies_list = file_worker.get_from_file()
+            vacancies_objects = Vacancy.get_list_of_vacancies(vacancies_list)
+            print(f"Количество загруженных вакансий - {len(vacancies_objects)}")
+            return UI.vacancies_working(vacancies_objects)
+
+        elif choice == 2:
+            file_worker.delete_from_file()
+            print("Файл очищен")
+            return UI.files_info_and_choice()
+
+        else:
+            return UI.file_working(file_name)
+
+    @staticmethod
+    def vacancies_working(vacancies: list) -> None:
+        """Обработка списка вакансий"""
+
+        print(f"Количество вакансий в работе - {len(vacancies)}")
+        print("Доступны следующие действия для обработки списка вакансий:")
+        print("1. Cохранить в файл")
+        print("2. Отфильтровать топ вакансий по зарплате")
+        print("3. Отфильтровать вакансии по ключевым словам")
+        print("4. Вывести краткую информацию о вакансиях в консоль")
+        choice = 0
+        while choice not in [1, 2, 3, 4]:
+            choice = int(input("Введите цифру от 1 до 4 для выбора действия: "))
+
+            if choice not in [1, 2, 3, 4]:
                 print("Повторите ввод")
 
-        file_name = input("Введите желаемое имя файла или пропустите ввод (имя по умолчанию - vacancies: ")
+        match choice:
 
-        vacancies = HH.load_vacancies(query_key_word)
+            case 1:
+                UI.save_to_file(vacancies)
+
+            case 2:
+                n = int(input("Введите количество вакансий с максимальной зарплатой, которые надо отобрать из списка"))
+                top_vacancies = Vacancy.get_top_salary_vacancies(vacancies, n)
+                return UI.vacancies_working(top_vacancies)
+
+            case 3:
+                keyword_list = input("Введите ключевые слова для фильтрации через пробел: ").strip().split()
+                filtered_vacancy = Vacancy.filter_by_keywords(vacancies, keyword_list)
+                return UI.vacancies_working(filtered_vacancy)
+
+            case 4:
+                for vacancy in vacancies:
+                    print(vacancy)
+                return UI.vacancies_working(vacancies)
+
+    @staticmethod
+    def save_to_file(vacancies: list) -> None:
+        """Функция интерфейса для выбора опций сохранения данных в файл"""
+
+        print("Выберете формат файла в которых нужно сохранить полученные вакансии: ")
+        print("1. json")
+        print("2. excel")
+
+        file_format = 0
+        while file_format not in [1, 2]:
+            file_format = int(input("Введите цифру 1 или 2 для выбора формата файла: "))
+            if file_format not in [1, 2]:
+                print("Повторите ввод")
+
+        file_name = input("Введите желаемое имя файла или пропустите ввод (имя по умолчанию - vacancies): ")
+        vacancies_to_save = Vacancy.get_list_of_dicts_vacancies(vacancies)
         match file_format:
             case 1:
-                json_saver = JSONWorker(file_name)
-                json_saver.save_to_file(Vacancy.get_list_of_dicts_vacancies(vacancies))
+                if len(file_name) > 0:
+                    json_saver = JSONWorker(file_name)
+                else:
+                    json_saver = JSONWorker()
+                json_saver.save_to_file(vacancies_to_save)
                 print(f"Данные успешно сохранены в файл {file_name}.json")
 
             case 2:
-                json_saver = JSONWorker(file_name)
-                json_saver.save_to_file(Vacancy.get_list_of_dicts_vacancies(vacancies))
-                print(f"Данные успешно сохранены в файл {file_name}.csx")
-
-            case 3:
-                excel_saver = ExcelWorker(file_name)
-                excel_saver.save_to_file(Vacancy.get_list_of_dicts_vacancies(vacancies))
+                if len(file_name) > 0:
+                    excel_saver = ExcelWorker(file_name)
+                else:
+                    excel_saver = ExcelWorker()
+                excel_saver.save_to_file(vacancies_to_save)
                 print(f"Данные успешно сохранены в файл {file_name}.xlsx")
 
-            case 4:
-                json_saver = JSONWorker(file_name)
-                json_saver.save_to_file(Vacancy.get_list_of_dicts_vacancies(vacancies))
-                print(f"Данные успешно сохранены в файл {file_name}.txt")
