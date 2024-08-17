@@ -58,46 +58,7 @@ class Vacancy(VacancyWorker):
     def __str__(self) -> str:
         """Получение краткой информации о вакансии"""
 
-        return f"{self.name} - Зарплата: {self.salary_string} - Город: {self.location} - График: {self.schedule}"
-
-    # Неактуальный метод
-    # @staticmethod
-    # @func_call_logging
-    # def __get_attribute_value(attribute: str, vacancy: dict) -> Any:
-    #     """Привязка мест хранения аттрибутов к месту хранения в JSON"""
-    #
-    #     match attribute:
-    #         case "id":
-    #             return vacancy["id"]
-    #         case "name":
-    #             return vacancy["name"]
-    #         case "location":
-    #             return vacancy["area"]["name"]
-    #         # от адреса отказался
-    #         # case "address":
-    #         #     return vacancy["address"]
-    #         case "salary":
-    #             return vacancy["salary"]
-    #         case "published_at":
-    #             return vacancy["published_at"]
-    #         case "url":
-    #             return vacancy["alternate_url"]
-    #         case "name_employer":
-    #             return vacancy["employer"]["name"]
-    #         case "url_employer":
-    #             return vacancy["employer"]["alternate_url"]
-    #         case "schedule":
-    #             return vacancy["schedule"]["name"]
-    #         case "employment":
-    #             return vacancy["employment"]["name"]
-    #         case "experience":
-    #             return vacancy["experience"]["name"]
-    #         case "requirement":
-    #             return vacancy["snippet"]["requirement"]
-    #         case "responsibility":
-    #             return vacancy["snippet"]["responsibility"]
-    #         case _:
-    #             return None
+        return f"{(self.name + " " * 600)[:60]} - Зарплата: {(self.salary_string + " " * 20)[:20]} - Город: {(self.location + " " * 20)[:20]} - График: {self.schedule}"
 
     @func_call_logging
     def to_dict(self) -> dict:
