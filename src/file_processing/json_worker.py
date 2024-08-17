@@ -13,18 +13,18 @@ class JSONWorker(FileWorker):
     path_to_file: str = "data/"  # путь до файла
     path_with_filename: str  # путь до файла вместе с именем файла
 
-    @func_call_logging
+    # @func_call_logging
     def __init__(self, file_name: str = "vacancies.json") -> None:
         self.__file_name = self.__check_and_get_file_name(file_name)
 
-    @func_call_logging
+    # @func_call_logging
     def save_to_file(self, vacancies: list[dict]) -> None:
         """Метод для сохранения в файл списка вакансий"""
 
         with open(self.path_to_file + self.__file_name, "w") as file:
             json.dump(vacancies, file, indent=4, ensure_ascii=False)
 
-    @func_call_logging
+    # @func_call_logging
     def add_to_file(self, vacancies: list[dict]) -> None:
         """Метод для добавления в файл вакансий без дублирования"""
 
@@ -43,14 +43,14 @@ class JSONWorker(FileWorker):
         # print(len(vacancies_in_file))
         self.save_to_file(vacancies_in_file)
 
-    @func_call_logging
+    # @func_call_logging
     def get_from_file(self) -> Any:
         """Метод для получения данных из файла"""
 
         with open(self.path_to_file + self.__file_name, "r") as file:
             return json.load(file)
 
-    @func_call_logging
+    # @func_call_logging
     def delete_from_file(self) -> None:
         """Общий функционал для удаления данных из файла"""
 
@@ -71,8 +71,9 @@ class JSONWorker(FileWorker):
         #         i += 1
         #     self.save_to_file(vacancies)
 
-    @func_call_logging
-    def __check_and_get_file_name(self, file_name: str) -> str:
+    # @func_call_logging
+    @staticmethod
+    def __check_and_get_file_name(file_name: str) -> str:
         if file_name[-5:] != ".json":
             return f"{file_name}.json"
         return file_name

@@ -24,9 +24,6 @@ class Vacancy(VacancyWorker):
     requirement: str  # требования (кратко)
     responsibility: str  # обязанности (кратко)
 
-    # набор, от которого отказался
-    # __slots__ = ("id", "name", "location", "address", "salary", "published_at", "url", "name_employer",
-    # "url_employer", "schedule", "employment", "experience", "requirement", "responsibility")
     __slots__ = (
         "id",
         "name",
@@ -43,7 +40,7 @@ class Vacancy(VacancyWorker):
         "responsibility",
     )
 
-    @func_call_logging
+    # @func_call_logging
     def __init__(self, vacancy: dict) -> None:
         """На вход конструктора ожидается словарь с ключами, аналогичными в __slots__
         В классе реализованы методы, позволяющие обработать данные от hh для приведения их в нужный вид
@@ -60,7 +57,7 @@ class Vacancy(VacancyWorker):
 
         return f"{(self.name + " " * 600)[:60]} - Зарплата: {(self.salary_string + " " * 20)[:20]} - Город: {(self.location + " " * 20)[:20]} - График: {self.schedule}"
 
-    @func_call_logging
+    # @func_call_logging
     def to_dict(self) -> dict:
         """Метод возвращает вакансию в формате словаря"""
 
@@ -72,14 +69,14 @@ class Vacancy(VacancyWorker):
         return result
 
     @staticmethod
-    @func_call_logging
+    # @func_call_logging
     def get_list_of_vacancies(vacancies: list[dict]) -> list:
         """Создание списка из объектов класса Vacancy"""
 
         return [Vacancy(vacancy) for vacancy in vacancies]
 
     @staticmethod
-    @func_call_logging
+    # @func_call_logging
     def get_list_of_dicts_vacancies(vacancies: list) -> list:
         """Создание списка словарей из списка объектов вакансий"""
 
@@ -92,25 +89,25 @@ class Vacancy(VacancyWorker):
         return attribute in keys
 
     @staticmethod
-    @func_call_logging
+    # @func_call_logging
     def get_list_id_vacancies(vacancies: list) -> list:
         """Получить список ID из списка вакансий (объектов или словарей)"""
 
         return [vacancy.id if isinstance(vacancy, Vacancy) else vacancy["id"] for vacancy in vacancies]
 
-    @func_call_logging
+    # @func_call_logging
     def get_salary(self) -> str:
         """Получить значение зарплаты"""
 
         return self.salary_string
 
-    @func_call_logging
+    # @func_call_logging
     def __get_salary_for_comparison(self) -> Any:
         """Получить значение зарплаты для сравнения. По умолчанию берется значение "от", если ничего не указано - 0"""
 
         return self.salary
 
-    @func_call_logging
+    # @func_call_logging
     def __eq__(self, other: Any) -> Any:
         """Метод сравнения вакансий по зарплате - для равенства =="""
 
@@ -119,7 +116,7 @@ class Vacancy(VacancyWorker):
         else:
             raise TypeError
 
-    @func_call_logging
+    # @func_call_logging
     def __ne__(self, other: Any) -> Any:
         """Метод сравнения вакансий по зарплате - для неравенства !="""
 
@@ -128,7 +125,7 @@ class Vacancy(VacancyWorker):
         else:
             raise TypeError
 
-    @func_call_logging
+    # @func_call_logging
     def __lt__(self, other: Any) -> Any:
         """Метод сравнения вакансий по зарплате - для оператора меньше <"""
         if type(other) is Vacancy:
@@ -136,7 +133,7 @@ class Vacancy(VacancyWorker):
         else:
             raise TypeError
 
-    @func_call_logging
+    # @func_call_logging
     def __le__(self, other: Any) -> Any:
         """Метод сравнения вакансий по зарплате - для оператора меньше или равно <="""
 
@@ -145,7 +142,7 @@ class Vacancy(VacancyWorker):
         else:
             raise TypeError
 
-    @func_call_logging
+    # @func_call_logging
     def __gt__(self, other: Any) -> Any:
         """Метод сравнения вакансий по зарплате - для оператора больше >"""
 
@@ -154,7 +151,7 @@ class Vacancy(VacancyWorker):
         else:
             raise TypeError
 
-    @func_call_logging
+    # @func_call_logging
     def __ge__(self, other: Any) -> Any:
         """Метод сравнения вакансий по зарплате - для оператора больше или равно >="""
 
@@ -164,7 +161,7 @@ class Vacancy(VacancyWorker):
             raise TypeError
 
     @staticmethod
-    @func_call_logging
+    # @func_call_logging
     def get_top_salary_vacancies(vacancies: list, top_n: int) -> list:
         """Получить топ вакансий по зарплате в заданном количестве"""
 
@@ -176,7 +173,7 @@ class Vacancy(VacancyWorker):
         return sorted_vacancies[:top_n]
 
     @staticmethod
-    @func_call_logging
+    # @func_call_logging
     def filter_by_keywords(vacancies: list, keywords: list) -> list:
         """Оставляет в списке только те вакансии, которые содержат ключевые слова в названии,
         требованиях или обязанностях
@@ -197,7 +194,7 @@ class Vacancy(VacancyWorker):
         return filtered_vacancies
 
     @classmethod
-    @func_call_logging
+    # @func_call_logging
     def vacancies_from_hh_processing(cls, vacancies: list[dict]) -> list[dict]:
         """Приведение данных от hh к формату для дальнейшей обработки"""
 
@@ -211,7 +208,7 @@ class Vacancy(VacancyWorker):
         return vacancies_processing
 
     @staticmethod
-    @func_call_logging
+    # @func_call_logging
     def __get_attribute_value_from_hh(attribute: str, vacancy: dict) -> Any:
         """Привязка мест хранения аттрибутов в данных от hh"""
 

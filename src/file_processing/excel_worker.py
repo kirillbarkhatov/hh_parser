@@ -35,7 +35,7 @@ class ExcelWorker(FileWorker):
         )
         vacancies_to_file.to_excel(self.path_to_file + self.__file_name, index=False)
 
-    @func_call_logging
+    # @func_call_logging
     def get_from_file(self) -> Any:
         """Метод для получения данных из файла"""
 
