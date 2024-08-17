@@ -180,13 +180,23 @@ class UI:
                     json_saver = JSONWorker(file_name)
                 else:
                     json_saver = JSONWorker()
-                json_saver.save_to_file(vacancies_to_save)
-                print(f"Данные успешно сохранены в файл {file_name}.json")
+                    file_name = "vacancies"
+                try:
+                    json_saver.add_to_file(vacancies_to_save)
+                    print(f"Данные успешно добавлены в файл {file_name}.json")
+                except (FileNotFoundError, KeyError, TypeError):
+                    json_saver.save_to_file(vacancies_to_save)
+                    print(f"Данные успешно сохранены в файл {file_name}.json")
 
             case 2:
                 if len(file_name) > 0:
                     excel_saver = ExcelWorker(file_name)
                 else:
                     excel_saver = ExcelWorker()
-                excel_saver.save_to_file(vacancies_to_save)
-                print(f"Данные успешно сохранены в файл {file_name}.xlsx")
+                    file_name = "vacancies"
+                try:
+                    excel_saver.add_to_file(vacancies_to_save)
+                    print(f"Данные успешно добавлены в файл {file_name}.xlsx")
+                except (FileNotFoundError, KeyError, TypeError):
+                    excel_saver.save_to_file(vacancies_to_save)
+                    print(f"Данные успешно сохранены в файл {file_name}.xlsx")
