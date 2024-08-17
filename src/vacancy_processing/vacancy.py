@@ -50,7 +50,7 @@ class Vacancy(VacancyWorker):
         """
 
         for vacancy_attribute in self.__slots__:
-            if self.__check_attribute(vacancy_attribute):
+            if self.__check_attribute(vacancy_attribute, vacancy.keys()):
                 setattr(self, vacancy_attribute, vacancy[vacancy_attribute])
             else:
                 setattr(self,vacancy_attribute, None)
@@ -86,10 +86,10 @@ class Vacancy(VacancyWorker):
         return [vacancy.to_dict() for vacancy in vacancies]
 
     @func_call_logging
-    def __check_attribute(self, attribute: Any) -> Any:
+    def __check_attribute(self, attribute: Any, keys: list) -> Any:
         """Валидация аттрибутов при создании объекта класса"""
 
-        return attribute in self.__slots__
+        return attribute in keys
 
     @staticmethod
     @func_call_logging

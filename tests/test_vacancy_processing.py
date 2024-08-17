@@ -57,6 +57,28 @@ def test_comparison_error(vacancies):
         assert vcncs[0] == "1"
 
 
+def test_vacancy_without_attribute(short_vacancy):
+    """Тест создания вакансий с неполным набором аттрибутов"""
+
+    assert not Vacancy(short_vacancy).location
+
+
+def test_str_vacancy(vacancy):
+    """Тест метода str"""
+
+    assert str(vacancy) == "Тестировщик комфорта квартир                                 - Зарплата: От 350000 до 450000  - Город: Воронеж              - График: Гибкий график"
+
+
+def test_get_top_salary_vacancies(vacancies):
+    """Тестируем топ по зарплате"""
+
+    v_lst = Vacancy.vacancies_from_hh_processing(vacancies)
+    v_obj = Vacancy.get_list_of_vacancies(v_lst)
+    v_obj = Vacancy.filter_by_keywords(v_obj, ["Java"])
+    assert Vacancy.get_top_salary_vacancies(v_lst, 1)[0]["salary"] == 4000000
+    assert Vacancy.get_top_salary_vacancies(v_obj, 1)[0].salary == 4000000
+
+
 def test_vacancy_worker(vacancies):
     """ до 100% базовый абстрактный класс - вопрос наставнику: как закрыть тестом метод объекта класса"""
 
