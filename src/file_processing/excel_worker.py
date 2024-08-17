@@ -5,8 +5,7 @@ import pandas as pd
 
 from src.file_processing.abc_file_worker import FileWorker
 from src.logger_decorators import func_call_logging
-from src.vacancy_processing.vacancy import Vacancy
-from src.json_denormalize import denormalize_json
+
 
 
 class ExcelWorker(FileWorker):
@@ -24,30 +23,11 @@ class ExcelWorker(FileWorker):
     def save_to_file(self, vacancies: list[dict]) -> None:
         """Метод для сохранения в файл списка вакансий"""
 
-        # vacancies_flat = pd.json_normalize(vacancies)
-
-        # with open(self.path_to_file+self.__file_name, "w") as file:
         pd.DataFrame(vacancies).to_excel(self.path_to_file + self.__file_name, index=False)
 
     # @func_call_logging
     def add_to_file(self, vacancies: list[dict]) -> None:
         """Метод для добавления в файл вакансий без дублирования"""
-
-        # vacancies_in_file = self.get_from_file()
-        # ids_vacancies = Vacancy.get_list_id_vacancies(vacancies)
-        # ids_vacancies_in_file = Vacancy.get_list_id_vacancies(vacancies_in_file)
-        #
-        # print(ids_vacancies)
-        # print(ids_vacancies_in_file)
-        # add_id_vacancies = list(set(ids_vacancies).difference(set(ids_vacancies_in_file)))
-        # print(add_id_vacancies)
-        # for vacancy_id in add_id_vacancies:
-        #     i = ids_vacancies.index(vacancy_id)
-        #     vacancies_in_file.append(vacancies[i])
-        #
-        # print(len(vacancies_in_file))
-        # self.save_to_file(vacancies_in_file)
-
 
         vacancies_in_file = pd.read_excel(self.path_to_file + self.__file_name)
         vacancies_in_file["id"] = vacancies_in_file["id"].astype(str)

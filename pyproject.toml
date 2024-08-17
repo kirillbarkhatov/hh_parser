@@ -66,6 +66,8 @@ omit = [
     "src/vacancy_processing/abc_vacancy_worker.py",
     "src/ui/abc_user_interface.py",
     "src/api/abc_parser.py",
-    "src/vacancy_processing/abc_vacancy_worker.py",
+    "src/file_processing/abc_file_worker.py",
+    "src/ui/ui.py",
+
     "main.py"
     ]
