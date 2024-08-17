@@ -1,3 +1,4 @@
+from numpy.random import vonmises
 
 from src.api.hh import HH
 from src.file_processing.excel_worker import ExcelWorker
@@ -11,25 +12,29 @@ from typing import Any
 class UI:
 
     @staticmethod
-    def greeting() -> None:
-        """Функция приветствия"""
+    def lets_go() -> None:
+        """Функция запускающая программу"""
 
         print("Программа для получения вакансий с сайта hh.ru и работы с ними")
         print("Выберите действие:")
         print("1. Загрузить данные о вакансиях с сайта hh.ru по ключевому слову")
         print('2. Получить информацию о ранее загруженных данных (хранятся в "data/", поддерживаемые форматы: json, xlsx)')
         choice = 0
+
         while choice not in [1, 2]:
-            choice = int(input("Введите 1 или 2: "))
-            if choice not in [1, 2]:
+            try:
+                choice = int(input("Введите 1 или 2: "))
+                if choice not in [1, 2]:
+                    print("Повторите ввод")
+            except ValueError:
                 print("Повторите ввод")
 
+        print()
         match choice:
             case 1:
                 UI.get_hh_vacancy()
             case 2:
                 UI.files_info_and_choice()
-
 
     @staticmethod
     def get_hh_vacancy() -> Any:
@@ -39,8 +44,13 @@ class UI:
         vacancies = HH.load_vacancies(query_key_word)
         vacancies_list = Vacancy.vacancies_from_hh_processing(vacancies)
         vacancies_objects = Vacancy.get_list_of_vacancies(vacancies_list)
+        if len(vacancies_objects) == 0:
+            print()
+            print("Вакансий по вашему запросу не найдено, попробуйте снова")
+            return UI.get_hh_vacancy()
         print()
         print(f"Количество загруженных вакансий - {len(vacancies_objects)}")
+        print()
         return UI.vacancies_working(vacancies_objects)
 
     @staticmethod
@@ -100,9 +110,12 @@ class UI:
         print("4. Вывести краткую информацию о вакансиях в консоль")
         choice = 0
         while choice not in [1, 2, 3, 4]:
-            choice = int(input("Введите цифру от 1 до 4 для выбора действия: "))
+            try:
+                choice = int(input("Введите цифру от 1 до 4 для выбора действия: "))
 
-            if choice not in [1, 2, 3, 4]:
+                if choice not in [1, 2, 3, 4]:
+                    print("Повторите ввод")
+            except ValueError:
                 print("Повторите ввод")
 
         match choice:
@@ -111,18 +124,34 @@ class UI:
                 UI.save_to_file(vacancies)
 
             case 2:
-                n = int(input("Введите количество вакансий с максимальной зарплатой, которые надо отобрать из списка"))
+                while True:
+                    try:
+                        n = int(input("Введите количество вакансий с максимальной зарплатой, которые надо отобрать из списка: "))
+                        break
+                    except ValueError:
+                        print("Повторите ввод - укажите целое число")
+                if n == 0:
+                    print()
+                    print("Вы ввели 0 - так не останется вакансий для обработки. Давайте попробуем ещё раз")
+                    print()
+                    return UI.vacancies_working(vacancies)
                 top_vacancies = Vacancy.get_top_salary_vacancies(vacancies, n)
                 return UI.vacancies_working(top_vacancies)
 
             case 3:
                 keyword_list = input("Введите ключевые слова для фильтрации через пробел: ").strip().split()
                 filtered_vacancy = Vacancy.filter_by_keywords(vacancies, keyword_list)
+                if len(filtered_vacancy) == 0:
+                    print()
+                    print("Ваш запрос не дал результата. Давайте попробуем ещё раз")
+                    print()
+                    return UI.vacancies_working(vacancies)
                 return UI.vacancies_working(filtered_vacancy)
 
             case 4:
                 for vacancy in vacancies:
                     print(vacancy)
+                print()
                 return UI.vacancies_working(vacancies)
 
     @staticmethod
@@ -135,8 +164,11 @@ class UI:
 
         file_format = 0
         while file_format not in [1, 2]:
-            file_format = int(input("Введите цифру 1 или 2 для выбора формата файла: "))
-            if file_format not in [1, 2]:
+            try:
+                file_format = int(input("Введите цифру 1 или 2 для выбора формата файла: "))
+                if file_format not in [1, 2]:
+                    print("Повторите ввод")
+            except ValueError:
                 print("Повторите ввод")
 
         file_name = input("Введите желаемое имя файла или пропустите ввод (имя по умолчанию - vacancies): ")
@@ -157,4 +189,3 @@ class UI:
                     excel_saver = ExcelWorker()
                 excel_saver.save_to_file(vacancies_to_save)
                 print(f"Данные успешно сохранены в файл {file_name}.xlsx")
-
